@@ -1,0 +1,177 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> vue2结合select2,Highcharts · CDBlog</title><meta name="description" content="vue2结合select2,Highcharts - chendong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yoursite.com/atom.xml" title="CDBlog"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">vue2结合select2,Highcharts</h1><div class="post-info">Mar 26, 2017</div><div class="post-content"><h3 id="vue2-中使用Highcharts"><a href="#vue2-中使用Highcharts" class="headerlink" title="vue2 中使用Highcharts"></a>vue2 中使用Highcharts</h3><p>stackoverflow 上的有答案 <a href="http://stackoverflow.com/questions/38777136/highcharts-in-vue-js-component" target="_blank" rel="noopener">http://stackoverflow.com/questions/38777136/highcharts-in-vue-js-component</a><br>因为画布要刷新，涉及到数据销毁, 需要执行 <code>this.target.destroy();</code> 。<br>需要注意的是，当数据处于隐藏状态时不能触发 <code>beforeDestroy</code> ， 即 <code>&lt;div v-show=&quot;isShow&quot;&gt;&lt;/div&gt;</code><br>刷新数据需要销毁之前的画布数据， 利用 <code>v-if</code> 进行动态销毁、新增。<br>    <template><br>        <div><br>            <chart :series="initSeries"></chart><br>        </div><br>    </template></p>
+<pre><code>&lt;script&gt;
+var Highcharts = require(&apos;highcharts&apos;);
+export default {
+    name : &quot;Chart&quot;,
+    props : {
+    series : {
+        type: Array,
+        required: true
+    }
+    },
+    data : function() {
+    return {
+        target: undefined
+    }
+    },
+    mounted : function() {
+    this.target = Highcharts.chart(this.$el, {
+        title: {
+        text: &apos;Monthly Average Temperature&apos;,
+        x: -20 //center
+        },
+        subtitle: {
+        text: &apos;Source: WorldClimate.com&apos;,
+        x: -20
+        },
+        xAxis: {
+        categories: [&apos;Jan&apos;, &apos;Feb&apos;, &apos;Mar&apos;, &apos;Apr&apos;, &apos;May&apos;, &apos;Jun&apos;,
+        &apos;Jul&apos;, &apos;Aug&apos;, &apos;Sep&apos;, &apos;Oct&apos;, &apos;Nov&apos;, &apos;Dec&apos;]
+        },
+        yAxis: {
+        title: {
+        text: &apos;Temperature (°C)&apos;
+        },
+        plotLines: [{
+        value: 0,
+        width: 1,
+        color: &apos;#808080&apos;
+        }]
+    },
+    tooltip: {
+        valueSuffix: &apos;°C&apos;
+    },
+    legend: {
+        layout: &apos;vertical&apos;,
+        align: &apos;right&apos;,
+        verticalAlign: &apos;middle&apos;,
+            borderWidth: 0
+    },
+    series: this.series
+    });
+},
+beforeDestroy: function() {
+    this.target.destroy();
+},
+}
+&lt;/script&gt;
+</code></pre><h3 id="vue2-使用select2"><a href="#vue2-使用select2" class="headerlink" title="vue2 使用select2"></a>vue2 使用select2</h3><a id="more"></a>
+<p><strong>先看官方示例</strong></p>
+<pre><code>&lt;div id=&quot;el&quot;&gt;&lt;/div&gt;
+&lt;!-- using string template here to work around HTML &lt;option&gt; placement restriction --&gt;
+&lt;script type=&quot;text/x-template&quot; id=&quot;demo-template&quot;&gt;
+&lt;div&gt;
+    &lt;p&gt;Selected: {{ selected }}&lt;/p&gt;
+    &lt;select2 :options=&quot;options&quot; v-model=&quot;selected&quot;&gt;
+    &lt;option disabled value=&quot;0&quot;&gt;Select one&lt;/option&gt;
+    &lt;/select2&gt;
+&lt;/div&gt;
+&lt;/script&gt;
+
+&lt;script type=&quot;text/x-template&quot; id=&quot;select2-template&quot;&gt;
+&lt;select&gt;
+    &lt;slot&gt;&lt;/slot&gt;
+&lt;/select&gt;
+&lt;/script&gt;
+
+Vue.component(&apos;select2&apos;, {
+props: [&apos;options&apos;, &apos;value&apos;],
+template: &apos;#select2-template&apos;,
+mounted: function () {
+    var vm = this
+    $(this.$el)
+    .val(this.value)
+    // init select2
+    .select2({ data: this.options })
+    // emit event on change.
+    .on(&apos;change&apos;, function () {
+        vm.$emit(&apos;input&apos;, this.value)
+    })
+},
+watch: {
+    value: function (value) {
+    // update value
+    $(this.$el).val(value)
+    },
+    options: function (options) {
+    // update options
+    $(this.$el).select2({ data: options })
+    }
+},
+destroyed: function () {
+    $(this.$el).off().select2(&apos;destroy&apos;)
+}
+})
+
+var vm = new Vue({
+el: &apos;#el&apos;,
+template: &apos;#demo-template&apos;,
+data: {
+    selected: 0,
+    options: [
+    { id: 1, text: &apos;Hello&apos; },
+    { id: 2, text: &apos;World&apos; }
+    ]
+}
+})
+</code></pre><p>上面是官方的代码有个问题， 就是当 一个事件，比如 <code>click</code> 让select的值发生改变，但select2不会自动进行切换。</p>
+<p>改动下select2组件，赋值后使select2同步变化。<br>下面是我自己改进后的：</p>
+<pre><code>Vue.component(&apos;select2&apos;, {
+props: [&apos;options&apos;, &apos;value&apos;],
+template: &apos;#select2-template&apos;,
+mounted: function () {
+    var vm = this
+    $(this.$el)
+    // .html(&apos;&apos;)
+    // init select2
+    .select2({ data: this.options })
+    .val(this.value)
+    .trigger(&apos;change&apos;)
+    // emit event on change.
+    .on(&apos;change&apos;, function () {
+        vm.$emit(&apos;input&apos;, this.value)
+    })
+},
+    watch: {
+    value: function (value, old) {
+    // update value
+    if ( value === old )
+        return ;
+    console.log(&apos;change value: &apos;+this.value+&apos;-- old: &apos;+old)
+
+    $(this.$el).val(value).trigger(&apos;change&apos;)
+    },
+    options: function (options) {
+    // update options
+    console.log(&apos;value: &apos;+this.value)
+    $(this.$el).html(&apos;&apos;).select2({ data: options }).trigger(&apos;change&apos;)
+    }
+},
+destroyed: function () {
+    $(this.$el).off().select2(&apos;destroy&apos;)
+}
+})
+
+var vm = new Vue({
+el: &apos;#el&apos;,
+template: &apos;#demo-template&apos;,
+data: {
+    selected: 2,
+    options: [
+    { id: 1, text: &apos;Hello&apos; },
+    { id: 2, text: &apos;World&apos; }
+    ]
+},
+methods:{
+    tt: function(){
+    this.options = [{id:33, text:&apos;sdfs&apos;}, {id:24, text:34}]
+    },
+    tt1: function(){
+    this.options = [{id:44, text:&apos;师傅带&apos;}, {id:4, text:&apos;放大&apos;}];
+    var self = this;
+    // this.$nextTick(function(){this.selected = 4;});   
+    setTimeout(function(){self.selected = 4;}, 0);       
+    }
+}
+})
+</code></pre></div></article></div></main><footer><div class="paginator"><a href="/2017/04/04/firefox自动填充问题，chrome同步请求渲染问题/" class="prev">上一篇</a><a href="/2017/03/21/jqGrid/" class="next">下一篇</a></div><div class="copyright"><p>© 2015 - 2018 <a href="http://yoursite.com">chendong</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-65933410-1",'auto');ga('send','pageview');</script></body></html>

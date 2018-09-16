@@ -1,0 +1,188 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> CDBlog</title><meta name="description" content="A Blog Powered By Hexo"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yoursite.com/atom.xml" title="CDBlog"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><ul class="home post-list"><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2017/03/21/jqGrid/" class="post-title-link">jqGrid</a></h2><div class="post-info">Mar 21, 2017</div><div class="post-content"><p>jqGrid 是一个表格插件，拥有排序、翻页、每页大小变化等常见功能等。</p>
+<pre><code>$(&apos;#tableName&apos;).jqGrid({
+    url : &apos;interface_url&apos;,
+    datatype : &quot;json&quot;,
+    colNames : [ &apos;Inv No&apos;, &apos;Date&apos;, &apos;Client&apos;, &apos;Amount&apos;, &apos;Tax&apos;,&apos;Total&apos;, &apos;Notes&apos; ],
+    colModel : [ 
+                 {name : &apos;id&apos;,index : &apos;id&apos;,width : 55}, 
+                 {name : &apos;invdate&apos;,index : &apos;invdate&apos;,width : 90}, 
+                 {name : &apos;name&apos;,index : &apos;name asc, invdate&apos;,width : 100, hidden:true}, 
+                 {name : &apos;amount&apos;,index : &apos;amount&apos;,width : 80,align : &quot;right&quot;}, 
+                 {name : &apos;tax&apos;,index : &apos;tax&apos;,width : 80,align : &quot;right&quot;}, 
+                 {name : &apos;total&apos;,index : &apos;total&apos;,width : 80,align : &quot;right&quot;}, 
+                 {name : &apos;note&apos;,index : &apos;note&apos;,width : 150,sortable : false} 
+               ],
+    rowNum : 10,
+    rowList : [ 10, 20, 30 ],
+    pager : &apos;#pager2&apos;,
+    sortname : &apos;id&apos;,
+    mtype : &quot;post&quot;,
+    viewrecords : true,
+    sortorder : &quot;desc&quot;
+})
+</code></pre><p>利用jqGrid进行table定义, 定义之后 利用 <code>$(&#39;#tableName&#39;).trigger(&quot;reloadGrid&quot;)</code> 触发更新。</p></div><a href="/2017/03/21/jqGrid/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2016/07/17/get-post区别/" class="post-title-link">get-post区别</a></h2><div class="post-info">Jul 17, 2016</div><div class="post-content"><p>鉴于前几天又看过的一篇关于 “get与post区别的文章”， 对于这个老生常谈的问题，我记录下自己的总结。</p>
+<ol>
+<li>就浏览器表现来看，get是直接将参数展现在地址栏上，有一定的长度限定， 大概2kb?4kb?反正是有较小的长度限定，当然除了传大量数据，一般的get请求是没问题的； 而post则将参数放到了request body中，并没有来地址栏中展现，参数内容长度则可以很大，适合传输有大量数据的请求。</li>
+<li>就语义化而言，get是直接发一次包进行请求，是幂等的，表示拉取数据，主要是进行读操作；而post则是非幂等，发两次包，一次头部，第二次包含了参数的body，表示数据存在更改，包括新建、更新、删除操作。</li>
+<li>就特殊的功用性而言，跨域常用的jsonp本质上就是get请求进行回调； 上传文件需要的 multipart/form-data, 就必须是post请求。</li>
+<li>编码与转译， get需要对特殊符号进行编码和转译，比如：encodeURIComponent(), 后端才能得到正确的数据； 而post则浏览器进行这项操作。</li>
+<li>get方式可以有页面缓存， 可以进行回退/前进操作， 而post没有。</li>
+</ol></div><a href="/2016/07/17/get-post区别/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2016/06/09/加盐密码/" class="post-title-link">加盐密码</a></h2><div class="post-info">Jun 9, 2016</div><div class="post-content"><h3 id="密文存储"><a href="#密文存储" class="headerlink" title="密文存储"></a>密文存储</h3><p>数据库中用户的密码一般是密文存储的，作用 ？</p>
+<ul>
+<li>防止被脱裤后账号泄露</li>
+<li>防止内部DBA或者有权限人员直接可以看到用户账号密码</li>
+</ul>
+<h3 id="加密hash算法"><a href="#加密hash算法" class="headerlink" title="加密hash算法"></a>加密hash算法</h3><p>传统的md5加密，在彩虹表的攻势下已经不再安全，新的加密方法呢？</p>
+<p><strong>可以使用</strong></p>
+<ul>
+<li>OpenWall的Portable PHP password hashing framework</li>
+<li>经过充分测试的加密hash函数，比如SHA256, SHA512, RipeMD, WHIRLPOOL, SHA3等</li>
+<li>设计良好的key扩展hash算法，比如PBKDF2，bcrypt，scrypt</li>
+<li>crypt的安全版本。($2y$, $5$, $6$)</li>
+</ul>
+<p><strong>不要使用</strong></p>
+<ul>
+<li>过时的hash函数，比如MD5,SHA1</li>
+<li>crypt的不安全版本。($1$, $2$, $2x$, $3$)</li>
+<li>任何自己设计的算法。</li>
+</ul>
+<h3 id="只依靠hash隐患"><a href="#只依靠hash隐患" class="headerlink" title="只依靠hash隐患"></a>只依靠hash隐患</h3><p>优秀的hash算法加密可以保障密文的安全，但如果多个企业只用一套”安全的加密算法”会有什么隐患？<br></div><a href="/2016/06/09/加盐密码/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2016/06/06/html-css-js-特殊字符/" class="post-title-link">html css js 特殊字符</a></h2><div class="post-info">Jun 6, 2016</div><div class="post-content"><p>对于一些不能用输入法直接打出的特殊符号，常用的方法包括字体图标，图片，纯css实现。</p>
+<h4 id="字体图标"><a href="#字体图标" class="headerlink" title="字体图标"></a>字体图标</h4><p>比如font-awesome font-icon web-font 等，都是引入一些字体库，然后直接调用class，实现图标，<br>这些图标的大小和颜色由普通字体的css属性控制，如color font-size。</p>
+<p>优点是图标可灵活调节，缺点是引入的字体库可能会比较大。。</p>
+<h4 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h4><p>这个最万能的方法。。。</p>
+<p>优点：兼容性方案<br>缺点：可能会引入较多碎片化的图标，增加了请求数，当然这个可以用雪碧图优化，只不过，色彩变化，大小控制方面灵活性不够</p>
+<h4 id="css实现"><a href="#css实现" class="headerlink" title="css实现"></a>css实现</h4><p>常见的比如 三角形用border-width实现。<br>缺点就是面对复杂的图形，将会很困难。</p>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>canvas  webGL  svg 等，一个是对低版本浏览器兼容不好， 实现也不一定方便。</p>
+<h3 id="特殊字符"><a href="#特殊字符" class="headerlink" title="特殊字符"></a>特殊字符</h3></div><a href="/2016/06/06/html-css-js-特殊字符/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2016/05/15/jquery插件/" class="post-title-link">jquery插件</a></h2><div class="post-info">May 15, 2016</div><div class="post-content"><p>说jQuery插件之前，先看看jQuery的几个关键点。</p>
+<ul>
+<li>jQuery.fn = jQuery.prototype </li>
+<li>jQuery = $</li>
+<li>jQuery.extend() = $.extend()</li>
+</ul>
+<p>前两个就别名关系， 第三个才是主要要说的。 $.extend(param a, param b) 作用是将参数b的中key值复制到a中，同key的话b将覆盖a的值。。<br>例如， $.extend({a:111, b:222, c:333}, {a:222, b:333, d:444})  将得到 对象{a:222, b:333, c:333, d:444}。</p>
+<p>进入正题， jQuery插件的写法。</p>
+<h4 id="extend"><a href="#extend" class="headerlink" title="$.extend"></a>$.extend</h4><pre><code>(function($){ 
+    $.extend({ 
+        functionA: function(){},
+        functionB: function(){}
+    });
+})(jQuery);
+</code></pre><p>自执行函数引入jQuery参数， 调用 $.extend()， 将functionA functionB 复制到jQuery对象中， 也就相当于 jQuery这个对象本身有了 functionA 和 functionB 一样。</p>
+<h4 id="fn-extend"><a href="#fn-extend" class="headerlink" title="$.fn.extend"></a>$.fn.extend</h4><p>同理,  可以用$.fn.extend() 方法。</p>
+<pre><code>(function($){ 
+        $.fn.extend({ 
+            functionA: function(){},
+            functionB: function(){}
+        });
+    })(jQuery);
+</code></pre><p>区别是， functionA functionB 复制到了jQuery.fn, 即 jQuery.prototype 上了。</p>
+<h3 id="一些技巧"><a href="#一些技巧" class="headerlink" title="一些技巧"></a>一些技巧</h3></div><a href="/2016/05/15/jquery插件/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2016/04/13/yii2/" class="post-title-link">yii2</a></h2><div class="post-info">Apr 13, 2016</div><div class="post-content"><p>前段时间学习了 yii2 这个 php MVC 框架。 向同事做了培训，搬运总结到blog上~~~</p>
+<p>文档资源：</p>
+<ul>
+<li><a href="http://www.yiichina.com/doc/guide/2.0" target="_blank" rel="noopener">中文文档</a>   </li>
+<li><a href="http://www.yiiframework.com/doc-2.0/guide-index.html" target="_blank" rel="noopener">官网文档</a></li>
+<li><a href="https://github.com/forecho/awesome-yii2" target="_blank" rel="noopener">yii2干货集 awesome-yii2</a></li>
+</ul>
+<h3 id="环境依赖"><a href="#环境依赖" class="headerlink" title="环境依赖"></a>环境依赖</h3><ul>
+<li>Yii 2.0 需要 PHP 5.4.0 或以上版本支持</li>
+<li>支持php7</li>
+</ul>
+<h3 id="Composer安装"><a href="#Composer安装" class="headerlink" title="Composer安装"></a>Composer安装</h3><p>win下的安装</p>
+<ul>
+<li>下载并安装 Composer-Setup.exe</li>
+<li>更新Composer <code>composer self-update</code></li>
+<li>composer global require “fxp/composer-asset-plugin:~1.1.1”   <strong>这里是 1.1.1，中文文档这里没更新，有坑，会影响后续yii2-smarty的安装</strong></li>
+<li>composer create-project –prefer-dist yiisoft/yii2-app-basic basic</li>
+</ul>
+<h3 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h3><pre><code>basic/                  应用根目录
+composer.json       Composer 配置文件, 描述包信息
+config/             包含应用配置及其它配置
+    console.php     控制台应用配置信息
+    web.php         Web 应用配置信息
+commands/           包含控制台命令类
+controllers/        包含控制器类
+models/             包含模型类
+runtime/            包含 Yii 在运行时生成的文件，例如日志和缓存文件
+vendor/             包含已经安装的 Composer 包，包括 Yii 框架自身
+views/              包含视图文件
+//modules           可以设置自己的模块
+web/                Web 应用根目录，包含 Web 入口文件
+    assets/         包含 Yii 发布的资源文件（javascript 和 css）
+    // js css img   可以设置文件目录
+    index.php       应用入口文件
+yii                 Yii 控制台命令执行脚本
+</code></pre></div><a href="/2016/04/13/yii2/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2016/04/03/关于一个评价效果的实现/" class="post-title-link">关于一个评价星星效果的实现</a></h2><div class="post-info">Apr 3, 2016</div><div class="post-content"><p>同样从一次面试得来的经验。<br>题目为 实现<strong>评价星星</strong>的思路。</p>
+<h3 id="思路1"><a href="#思路1" class="headerlink" title="思路1"></a>思路1</h3><p>有一张长图，包含了5个已选择的星星和未选择的星星，用户选择哪个星级评价时，移动整个图片，即 改变<code>background-position</code>的值。<br>HTML如下：</p>
+<pre><code>&lt;div&gt;
+    &lt;span&gt;&lt;/span&gt;
+    &lt;span&gt;&lt;/span&gt;
+    &lt;span&gt;&lt;/span&gt;
+    &lt;span&gt;&lt;/span&gt;
+    &lt;span&gt;&lt;/span&gt;
+&lt;/div&gt;
+</code></pre><p>div的background是图片， span是透明层，用户选择那个时，用于定位，然后移动div，实现效果。<br>优化思路： 去掉span，整个结构只有一个div， 根据event.target,offset位置偏移来确认用户选择的评价星级。<br></div><a href="/2016/04/03/关于一个评价效果的实现/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2016/04/03/关于js声明提前/" class="post-title-link">关于js声明提前</a></h2><div class="post-info">Apr 3, 2016</div><div class="post-content"><p>在一次笔试中碰到，得到面试官的指导。<br>题目大概是这样：</p>
+<pre><code>var a = 10;
+function test(){ 
+  a = 1;
+  console.log(a); 
+  var a;
+  console.log(a); 
+}
+
+test();   // 1  1
+console.log(a); // 10
+</code></pre><p>在test函数中，先 <code>var a;</code>  单纯的变量声明，会在同级函数中进行声明提前， 类似于 <code>function</code> 可以放到执行时的后面一样， 所以 test()中 a 声明为了一个局部变量，相当于 <code>var a; a = 1;</code>  操作。</p>
+<h4 id="变化与思考："><a href="#变化与思考：" class="headerlink" title="变化与思考："></a>变化与思考：</h4><pre><code>var a = 10;
+function test(){ 
+  a = 1;
+  console.log(a); 
+  var a = 20;
+  console.log(a); 
+}
+
+test();   // 1  20
+console.log(a); // 10
+</code></pre><p>发现没？ <code>var a = 20</code> 这部分相当于完成了两个操作， 1： 声明提前，将 a 设置为局部变量， 2：当执行到<code>var a = 20</code>时， 将a赋值为20。</p>
+<h4 id="验证："><a href="#验证：" class="headerlink" title="验证："></a>验证：</h4><pre><code>var a = 10;
+function test(){ 
+  console.log(a); 
+  var a;
+  console.log(a); 
+}
+
+test();   // undefined undefined  
+console.log(a); // 10
+</code></pre><p><code>var a</code> 声明提前，但没有赋值， 所以 undefined。</p>
+<pre><code>var a = 10;
+function test(){ 
+  console.log(a); 
+  var a = 1;
+  console.log(a); 
+}
+
+test();   // undefined 1  
+console.log(a); // 10
+</code></pre><p>同样的思路： 声明提前，a为局部变量，一开始未赋值， 为 undefined，后面赋值为 1</p></div><a href="/2016/04/03/关于js声明提前/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2016/03/27/fixed与input处理/" class="post-title-link">fixed与input处理</a></h2><div class="post-info">Mar 27, 2016</div><div class="post-content"><p>在移动端下， fixed有兼容问题，解决如iScroll， input也有兼容问题，挡住了内容无法下滑显示等等，这个就要用js控制或者从css布局处解决了。<br>那么，两者结合到一起会有怎样的bug？</p>
+<h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3><ul>
+<li>对于没有尺码属性选择的商品， 点击 加入购物车直接执行</li>
+<li>有尺码属性选择， 则需要在右侧弹出侧边框确认</li>
+</ul>
+<p><img src="/images/goods/1.jpg" style="float: left;width:50%; height:500px "><img src="/images/goods/2.jpg" style="float: left;width:50%; height:500px "></p>
+<h3 id="fixed"><a href="#fixed" class="headerlink" title="fixed"></a>fixed</h3><h4 id="加入购物车-fixed"><a href="#加入购物车-fixed" class="headerlink" title="加入购物车 fixed"></a>加入购物车 fixed</h4><p>商品内容部分用了固定高度+ <code>overflow: scroll;</code>来布局，已经规避了一些兼容问题了。<br>底部布局：</p>
+<pre><code>#main .global-add-cart, .global-quick_buy {
+    position: fixed;
+    color: #fff;
+    width: 49.5%;
+    font-weight: bold;
+    z-index: 99;
+    text-align: center;
+    font-size: 24px;
+    line-height: 30px;
+    bottom: 0;
+    right: 0;
+    -webkit-transform-style: preserve-3d;
+}
+</code></pre><p>当点击input时， 由于内容部分可以scroll滑动， 可以方便的输入信息， 不存在问题。</p></div><a href="/2016/03/27/fixed与input处理/" class="read-more">...阅读全文</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2016/03/25/微商城详情页的效果总结/" class="post-title-link">微商城详情页的效果总结</a></h2><div class="post-info">Mar 25, 2016</div><div class="post-content"><h3 id="微商城详情页H5效果"><a href="#微商城详情页H5效果" class="headerlink" title="微商城详情页H5效果"></a>微商城详情页H5效果</h3><p>这个效果是仿寺库APP的效果。<br><img src="/images/goodsAnim.gif" alt=""></p>
+<h4 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h4><h5 id="商品图"><a href="#商品图" class="headerlink" title="商品图"></a>商品图</h5><p>这个比较好说，向上滑动到一定阶段触发动画， 商品图变小，采用的是CSS3的<code>translateZ()</code> <code>perspective</code> 实现，当然也可以通过<code>scale()</code>和设置外层div宽高实现，用<code>perspective</code>是为了顺便实现加入购物车按钮3D翻转的效果。<br>颜色变灰，则是 <code>filter:grayscale()</code>，最后消失则是 <code>opacity</code>，最后的这个消失效果是个兼容iOS下图片闪烁的处理，后面再谈这个兼容问题。</p>
+<p>商品图是用了swipe.js滑动。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;goods-img&quot; id=&quot;slider&quot; style=&quot;visibility: visible; opacity: 1;&quot;&gt;</span><br><span class="line">            &lt;ul style=&quot;width: 1032.56px;&quot;&gt;</span><br><span class="line">                 &lt;li&gt;&lt;img src=&quot;&quot; alt=&quot;&quot;&gt;&lt;/li&gt;</span><br><span class="line">                 &lt;li&gt;&lt;img src=&quot;&quot; alt=&quot;&quot;&gt;&lt;/li&gt;</span><br><span class="line">                 &lt;li&gt;&lt;img src=&quot;&quot; alt=&quot;&quot;&gt;&lt;/li&gt;</span><br><span class="line">            &lt;/ul&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<h5 id="详情介绍部分"><a href="#详情介绍部分" class="headerlink" title="详情介绍部分"></a>详情介绍部分</h5><p>一直居于底部，高度发生变化，并且是可滚动查看内容的。动画效果，主要是改变容器的<code>height</code>，并且绝对定位，居于底部，<code>position:absolute;</code>, 为了滚动， 加了属性 <code>overflow:scroll</code>。 一开始通过JS算出总高度和商品图高度，得到详情部分的初始高度。<code>touchstart</code>记录初始位置， <code>touchmove</code>则记录即时位置，<br>计算出商品图变小的比例和详情部分高度的变化。 <code>touchend</code>和 <strong><code>touchcancel</code></strong>的时候，位移小则回复原位，大于50则向上展开。<br>购物车的图标的动画效果，在iOS下会使<strong>商品图-详情部分-购物车图标</strong>三者层级混乱闪烁，<code>-webkit-backface-visibility:hidden</code>无效，商品图隐藏可以规避这个问题。<br></div><a href="/2016/03/25/微商城详情页的效果总结/" class="read-more">...阅读全文</a></article></li></ul></main><footer><div class="paginator"><a href="/page/2/" class="prev">上一页</a><a href="/page/4/" class="next">下一页</a></div><div class="copyright"><p>© 2015 - 2018 <a href="http://yoursite.com">chendong</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-65933410-1",'auto');ga('send','pageview');</script></body></html>

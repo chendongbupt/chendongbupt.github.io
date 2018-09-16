@@ -1,0 +1,54 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> jquery插件 · CDBlog</title><meta name="description" content="jquery插件 - chendong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yoursite.com/atom.xml" title="CDBlog"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">jquery插件</h1><div class="post-info">May 15, 2016</div><div class="post-content"><p>说jQuery插件之前，先看看jQuery的几个关键点。</p>
+<ul>
+<li>jQuery.fn = jQuery.prototype </li>
+<li>jQuery = $</li>
+<li>jQuery.extend() = $.extend()</li>
+</ul>
+<p>前两个就别名关系， 第三个才是主要要说的。 $.extend(param a, param b) 作用是将参数b的中key值复制到a中，同key的话b将覆盖a的值。。<br>例如， $.extend({a:111, b:222, c:333}, {a:222, b:333, d:444})  将得到 对象{a:222, b:333, c:333, d:444}。</p>
+<p>进入正题， jQuery插件的写法。</p>
+<h4 id="extend"><a href="#extend" class="headerlink" title="$.extend"></a>$.extend</h4><pre><code>(function($){ 
+    $.extend({ 
+        functionA: function(){},
+        functionB: function(){}
+    });
+})(jQuery);
+</code></pre><p>自执行函数引入jQuery参数， 调用 $.extend()， 将functionA functionB 复制到jQuery对象中， 也就相当于 jQuery这个对象本身有了 functionA 和 functionB 一样。</p>
+<h4 id="fn-extend"><a href="#fn-extend" class="headerlink" title="$.fn.extend"></a>$.fn.extend</h4><p>同理,  可以用$.fn.extend() 方法。</p>
+<pre><code>(function($){ 
+        $.fn.extend({ 
+            functionA: function(){},
+            functionB: function(){}
+        });
+    })(jQuery);
+</code></pre><p>区别是， functionA functionB 复制到了jQuery.fn, 即 jQuery.prototype 上了。</p>
+<h3 id="一些技巧"><a href="#一些技巧" class="headerlink" title="一些技巧"></a>一些技巧</h3><a id="more"></a>
+<h4 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h4><pre><code>functionA: function(options){
+    var defaults = { 
+        a: 11,
+        b:222,
+        ...
+    };
+
+    $.extend(defaults, options)  // or  $.extend(options, defaults)  or  params = $.extend(options, defaults)
+}
+</code></pre><p>defaults存储了默认参数， $.extend() 就将用户的参数覆盖默认参数， 用户可以传入options来个性化使用插件。</p>
+<h4 id="插件返回值"><a href="#插件返回值" class="headerlink" title="插件返回值"></a>插件返回值</h4><ul>
+<li>直接在 functionA 中输出插件结果或者直接操作完dom，好处是直接就得到结果，不用进行其他处理。</li>
+<li>学习jQuery的单例模式， 在插件中返回一个插件对象， 用户可以灵活调用插件内的方法</li>
+<li>返回this，直接进行jQuery链式调用</li>
+</ul>
+<h3 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h3><p>不管$.extend() 还是 $.fn.extend()， 都是往jQuery对象中添加了新的方法， 一个是添加在jQuery本身，一个是jQuery.prototype上。也就是说, 可以直接 用 jQuery.functionA = function(), jQuery.prototype.functionA = function() 的方法来开发。<br>那么， 用 $.extend() $.fn.extend() 的好处呢？ 这个就是这个自执行函数的好处了。</p>
+<ul>
+<li>隔绝作用域，防止多个插件或者多个js文件的变量污染</li>
+<li>方便压缩， (function(){})(jQuery); 这种函数块 对于压缩是友好的</li>
+<li>方便扩展，如果只是简单的dom选择器，在移动端可以用zepto代替jQuery, 传入window,则可以减少作用域链的查找，提升性能。<pre><code>(function($, window){ 
+        $.fn.extend({ 
+            functionA: function(){},
+            functionB: function(){}
+        });
+    })(jQuery，window);
+</code></pre></li>
+</ul>
+<p>最后， 上传一个 练手的<a href="https://github.com/chendongbupt/blog-example/blob/master/jquery.timer.js" target="_blank" rel="noopener">定时器插件</a></p>
+<p>用法示例： <code>$.fn.timer({startTime:1460893951, selectorId:&#39;striasd&#39;, format:&#39;Object&#39;});</code></p>
+</div></article></div></main><footer><div class="paginator"><a href="/2016/06/06/html-css-js-特殊字符/" class="prev">上一篇</a><a href="/2016/04/13/yii2/" class="next">下一篇</a></div><div class="copyright"><p>© 2015 - 2018 <a href="http://yoursite.com">chendong</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-65933410-1",'auto');ga('send','pageview');</script></body></html>

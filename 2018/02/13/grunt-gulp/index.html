@@ -1,0 +1,19 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> grunt_gulp · CDBlog</title><meta name="description" content="grunt_gulp - chendong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yoursite.com/atom.xml" title="CDBlog"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">grunt_gulp</h1><div class="post-info">Feb 13, 2018</div><div class="post-content"><p>###<br><code>grunt</code> 与 <code>gulp</code> 其实是很像的。</p>
+<ul>
+<li>loadNpmTasks(‘grunt-<em>‘) === requier(‘gulp-</em>‘)    //载入处理插件</li>
+<li>registerTask === task   //创建任务</li>
+<li>grunt [taskName]  ==== gulp [taskName]   //执行某个任务</li>
+</ul>
+<p>区别：</p>
+<ul>
+<li>对于要处理的文件较多较大时， gulp 基于流 速度会快不少</li>
+<li>gulp简单的<code>.src-&gt;.pipe-&gt;.dest</code>,任务流程很清晰， 而grunt是基于配置，然后创建任务，配置与任务分离，如果配置较多时，可读性就不如gulp task了</li>
+</ul>
+<p>为什么gulp会比grunt更受欢迎? </p>
+<ul>
+<li>gulp 速度更快，这个可能是更多的情况，毕竟项目一般引入的外部资源都不少，如果一点改动就执行好几秒，体验是很差的，但可以解决，对dev开发环境进行配置，资源文件单独处理，生产环境再打包压缩。</li>
+<li>gulp 主要API就5个 <code>.src</code> <code>.dest</code> <code>.pipe</code> <code>.task</code> <code>.watch</code>， 再配合官网的指南，上手难度低，而且任务可读性会更好</li>
+</ul>
+<p>两者一对比， gulp 的学习成本低、易上手的优势就更大了。</p>
+<a id="more"></a>
+</div></article></div></main><footer><div class="paginator"><a href="/2018/02/25/http缓存/" class="prev">上一篇</a><a href="/2018/02/13/Angular1小结/" class="next">下一篇</a></div><div class="copyright"><p>© 2015 - 2018 <a href="http://yoursite.com">chendong</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-65933410-1",'auto');ga('send','pageview');</script></body></html>

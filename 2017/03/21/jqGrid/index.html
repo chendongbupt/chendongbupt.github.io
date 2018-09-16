@@ -1,0 +1,26 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> jqGrid · CDBlog</title><meta name="description" content="jqGrid - chendong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yoursite.com/atom.xml" title="CDBlog"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">jqGrid</h1><div class="post-info">Mar 21, 2017</div><div class="post-content"><p>jqGrid 是一个表格插件，拥有排序、翻页、每页大小变化等常见功能等。</p>
+<pre><code>$(&apos;#tableName&apos;).jqGrid({
+    url : &apos;interface_url&apos;,
+    datatype : &quot;json&quot;,
+    colNames : [ &apos;Inv No&apos;, &apos;Date&apos;, &apos;Client&apos;, &apos;Amount&apos;, &apos;Tax&apos;,&apos;Total&apos;, &apos;Notes&apos; ],
+    colModel : [ 
+                 {name : &apos;id&apos;,index : &apos;id&apos;,width : 55}, 
+                 {name : &apos;invdate&apos;,index : &apos;invdate&apos;,width : 90}, 
+                 {name : &apos;name&apos;,index : &apos;name asc, invdate&apos;,width : 100, hidden:true}, 
+                 {name : &apos;amount&apos;,index : &apos;amount&apos;,width : 80,align : &quot;right&quot;}, 
+                 {name : &apos;tax&apos;,index : &apos;tax&apos;,width : 80,align : &quot;right&quot;}, 
+                 {name : &apos;total&apos;,index : &apos;total&apos;,width : 80,align : &quot;right&quot;}, 
+                 {name : &apos;note&apos;,index : &apos;note&apos;,width : 150,sortable : false} 
+               ],
+    rowNum : 10,
+    rowList : [ 10, 20, 30 ],
+    pager : &apos;#pager2&apos;,
+    sortname : &apos;id&apos;,
+    mtype : &quot;post&quot;,
+    viewrecords : true,
+    sortorder : &quot;desc&quot;
+})
+</code></pre><p>利用jqGrid进行table定义, 定义之后 利用 <code>$(&#39;#tableName&#39;).trigger(&quot;reloadGrid&quot;)</code> 触发更新。</p>
+<a id="more"></a>
+<div class="tip"><br>### bug<br>今天利用 jqGrid 出现 报错，  “Uncaught Syntax error, unrecognized expression：#”<br>发现table 是需要用id选择器进行定义。<br><a href="http://stackoverflow.com/questions/4011429/jqgrid-throws-uncaught-syntax-error-unrecognized-expression" target="_blank" rel="noopener">http://stackoverflow.com/questions/4011429/jqgrid-throws-uncaught-syntax-error-unrecognized-expression</a><br></div>
+</div></article></div></main><footer><div class="paginator"><a href="/2017/03/26/vue2结合select2-highCharts/" class="prev">上一篇</a><a href="/2016/07/17/get-post区别/" class="next">下一篇</a></div><div class="copyright"><p>© 2015 - 2018 <a href="http://yoursite.com">chendong</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-65933410-1",'auto');ga('send','pageview');</script></body></html>

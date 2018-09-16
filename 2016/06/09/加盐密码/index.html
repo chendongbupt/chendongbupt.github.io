@@ -1,0 +1,43 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 加盐密码 · CDBlog</title><meta name="description" content="加盐密码 - chendong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yoursite.com/atom.xml" title="CDBlog"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">加盐密码</h1><div class="post-info">Jun 9, 2016</div><div class="post-content"><h3 id="密文存储"><a href="#密文存储" class="headerlink" title="密文存储"></a>密文存储</h3><p>数据库中用户的密码一般是密文存储的，作用 ？</p>
+<ul>
+<li>防止被脱裤后账号泄露</li>
+<li>防止内部DBA或者有权限人员直接可以看到用户账号密码</li>
+</ul>
+<h3 id="加密hash算法"><a href="#加密hash算法" class="headerlink" title="加密hash算法"></a>加密hash算法</h3><p>传统的md5加密，在彩虹表的攻势下已经不再安全，新的加密方法呢？</p>
+<p><strong>可以使用</strong></p>
+<ul>
+<li>OpenWall的Portable PHP password hashing framework</li>
+<li>经过充分测试的加密hash函数，比如SHA256, SHA512, RipeMD, WHIRLPOOL, SHA3等</li>
+<li>设计良好的key扩展hash算法，比如PBKDF2，bcrypt，scrypt</li>
+<li>crypt的安全版本。($2y$, $5$, $6$)</li>
+</ul>
+<p><strong>不要使用</strong></p>
+<ul>
+<li>过时的hash函数，比如MD5,SHA1</li>
+<li>crypt的不安全版本。($1$, $2$, $2x$, $3$)</li>
+<li>任何自己设计的算法。</li>
+</ul>
+<h3 id="只依靠hash隐患"><a href="#只依靠hash隐患" class="headerlink" title="只依靠hash隐患"></a>只依靠hash隐患</h3><p>优秀的hash算法加密可以保障密文的安全，但如果多个企业只用一套”安全的加密算法”会有什么隐患？<br><a id="more"></a></p>
+<ol>
+<li>网站A被脱裤，密文保障了密码的安全，但脱裤者自己注册一个号，得到了密文， 就可以得到一个明文-&gt;密文的映射，相当于破解了一个密文， 然后在数据中进行 <code>select pwd=&quot;xxx&quot;</code> 操作，就可以得到相同密码的用户。</li>
+<li>在密码爆炸的时代，用户在多个网站下的密码很可能是一样的，参考扎克伯克fb twitter linkedin 密码设置一样，被黑客破解的事件。<br>这样的话， 一个网站被脱裤，所以网站都有了危机。</li>
+</ol>
+<p>显然，除了优秀的hash算法加密外，可以对它进行一点改进或者说增强， 一种方法就是 <strong>加盐</strong>。</p>
+<p>盐(salt) 是开发设计者设计的一种随机字符串，在密文中加上盐的干扰，可以加大破解难度，变相提高安全性。</p>
+<p>md5(md5(pwd) + salt) , 但md5已经不再安全。</p>
+<p>改良下， SHA512( SHA512(pwd) + salt )</p>
+<p>但暴力破解也是一个问题，利用一种慢哈希算法，设置一次加密的时间，执行一次hash加密会很慢，提高暴力破解的时间，变相提高安全性。<br>bcrypt(SHA512(pwd), salt, cost)</p>
+<h3 id="存储与验证过程"><a href="#存储与验证过程" class="headerlink" title="存储与验证过程"></a>存储与验证过程</h3><p>存储一个密码：</p>
+<ol>
+<li>使用CSPRNG生成一个长的随机盐。</li>
+<li>将密码和盐拼接在一起，使用标准的加密hash函数比如SHA256进行hash</li>
+<li>将盐和hash记录在用户数据库中</li>
+</ol>
+<p>验证一个密码：</p>
+<ol>
+<li>从数据库中取出用户的盐和hash</li>
+<li>将用户输入的密码和盐按相同方式拼接在一起，使用相同的hash函数进行hash</li>
+<li>比较计算出的hash跟存储的hash是否相同。如果相同则密码正确。反之则密码错误。</li>
+</ol>
+<p>资料： (<a href="http://drops.wooyun.org/papers/1066" target="_blank" rel="noopener">http://drops.wooyun.org/papers/1066</a>) (<a href="http://blog.coderzh.com/2016/01/10/a-password-security-design-example/" target="_blank" rel="noopener">http://blog.coderzh.com/2016/01/10/a-password-security-design-example/</a>)</p>
+</div></article></div></main><footer><div class="paginator"><a href="/2016/07/17/get-post区别/" class="prev">上一篇</a><a href="/2016/06/06/html-css-js-特殊字符/" class="next">下一篇</a></div><div class="copyright"><p>© 2015 - 2018 <a href="http://yoursite.com">chendong</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-65933410-1",'auto');ga('send','pageview');</script></body></html>

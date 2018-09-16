@@ -1,0 +1,204 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> gulp多任务 · CDBlog</title><meta name="description" content="gulp多任务 - chendong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yoursite.com/atom.xml" title="CDBlog"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">gulp多任务</h1><div class="post-info">Apr 15, 2017</div><div class="post-content"><h4 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h4><ol>
+<li>同时处理多个web文件</li>
+<li>css js 压缩合并</li>
+<li>资源版本号替换</li>
+<li>监听资源变化，进行压缩合并操作</li>
+</ol>
+<h4 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h4><pre><code>/resources
+    /common                //common源文件
+    /js
+    /sass
+    /libs                  //资源库文件
+    /dist
+        /testA
+            lib.min.js
+            lib.min.css
+            testA.js
+            testA.css
+        /testB
+            lib.min.js
+            lib.min.css
+            testB.js
+            testB.css
+        /common  
+            common.css
+            common.js  
+</code></pre><p>/resources/common 是公共的common.css common.js 源文件， 构建后在 /dist/common/ 下<br>/resources/sass, resources/js 是.scss .js 源文件</p>
+<a id="more"></a>
+<h5 id="单web配置文件"><a href="#单web配置文件" class="headerlink" title="单web配置文件"></a>单web配置文件</h5><pre><code>testA_gulp.js
+    export {
+        libsJs : &apos;xxx&apos;,
+        libsCss : &apos;xxx&apos;,
+        filename : &apos;testA&apos;,
+        mainCss : &apos;testA.scss&apos;,
+        mainJs : &apos;testA.js&apos;
+    }
+
+testB_gulp.js
+    export {
+        libsJs : &apos;xxx&apos;,
+        libsCss : &apos;xxx&apos;,
+        filename : &apos;testB&apos;,
+        mainCss : &apos;testB.scss&apos;,
+        mainJs : &apos;testB.js&apos;
+    }
+</code></pre><h4 id="CLI"><a href="#CLI" class="headerlink" title="CLI"></a>CLI</h4><p>gulp [taskType] [–file testA[,testB]]</p>
+<h5 id="taskType"><a href="#taskType" class="headerlink" title="taskType"></a>taskType</h5><p>default : 默认包含 common 和 config<br>common : 公共资源 /common 的构建<br>config ：web资源的构建，即 lib.min.css lib.min.js file.css file.js, 生成在 /dist/file 文件夹下<br>version ： replace 替换的方法 更新版本号</p>
+<p>不加 –file 参数，则会将 /gulpTask 下的配置文件都读取<br>–file testA,testB 多文件用 , 隔开</p>
+<h4 id="package-json"><a href="#package-json" class="headerlink" title="package.json"></a>package.json</h4><pre><code>{
+&quot;devDependencies&quot;: {
+    &quot;gulp&quot;: &quot;*&quot;,
+    &quot;gulp-asset-rev&quot;: &quot;*&quot;,
+    &quot;gulp-autoprefixer&quot;: &quot;*&quot;,
+    &quot;gulp-changed&quot;: &quot;*&quot;,
+    &quot;gulp-concat&quot;: &quot;*&quot;,
+    &quot;gulp-csslint&quot;: &quot;*&quot;,
+    &quot;gulp-csso&quot;: &quot;*&quot;,
+    &quot;gulp-htmlmin&quot;: &quot;*&quot;,
+    &quot;gulp-jshint&quot;: &quot;*&quot;,
+    &quot;gulp-load-plugins&quot;: &quot;*&quot;,
+    &quot;gulp-rename&quot;: &quot;*&quot;,
+    &quot;gulp-rev&quot;: &quot;^7.1.2&quot;,
+    &quot;gulp-rev-collector&quot;: &quot;^1.0.5&quot;,
+    &quot;gulp-sass&quot;: &quot;*&quot;,
+    &quot;gulp-uglify&quot;: &quot;*&quot;,
+    &quot;gulp-util&quot;: &quot;*&quot;,
+    &quot;jshint&quot;: &quot;*&quot;,
+    &quot;run-sequence&quot;: &quot;*&quot;,
+    &quot;wrench&quot;: &quot;^1.59&quot;,
+    &quot;gulp-replace&quot;: &quot;*&quot;
+},
+&quot;engines&quot;: {
+    &quot;node&quot;: &quot;&gt;=4.0&quot;
+}
+}
+</code></pre><h4 id="gulpfile-js"><a href="#gulpfile-js" class="headerlink" title="gulpfile.js"></a>gulpfile.js</h4><pre><code>var wrench = require(&apos;wrench&apos;),
+    gulp = require(&apos;gulp&apos;),
+    replace = require(&apos;gulp-replace&apos;),
+    uglify = require(&apos;gulp-uglify&apos;),
+    sass = require(&apos;gulp-sass&apos;),
+    csso = require(&apos;gulp-csso&apos;), 
+    concat = require(&apos;gulp-concat&apos;) ;
+
+var resDir = &apos;../resources/&apos;;
+var minimist = require(&apos;minimist&apos;);
+var knownOptions = {
+string: &apos;file&apos;,
+default: &apos;&apos;
+};
+var options = minimist(process.argv.slice(2), knownOptions);
+if ( options.file ){
+    var fileArr = options.file.split(&apos;,&apos;),
+        configs = [] ;
+    for ( var i=0,len=fileArr.length; i&lt;len; i++ ){
+        configs.push(require(&apos;./gulpTask/&apos;+fileArr[i]+&apos;_gulp.js&apos;));
+    }
+}
+else{
+    var configs = wrench.readdirSyncRecursive(&apos;./gulpTask&apos;).filter(function(file) {
+    return (/^\w+_gulp\.js$/g).test(file);
+    }).map(function(file) {
+    return require(&apos;./gulpTask/&apos; + file);
+    });
+};
+
+gulp.task(&apos;common&apos;, commonTask);
+gulp.task(&apos;config&apos;, function(){
+configs.map(function(v){
+    configTask(v);
+});
+});
+
+gulp.task(&apos;default&apos;, [&apos;common&apos;, &apos;config&apos;]);
+
+// 给 .js .css 文件加时间戳
+var timestamp = Date.now();
+gulp.task(&apos;version&apos;, function(){
+configs.map(function(v){
+    version(v);
+});
+});
+
+function version(v){  
+gulp.src(resDir+v.fileDir+v.filename+&apos;.vm&apos;)
+    .pipe(replace(/\/((\w|-|\.)+)\.js(\?v=\w+)?/g, &apos;/$1.js?v=&apos;+timestamp))
+    .pipe(replace(/\/((\w|-|\.)+)\.css(\?v=\w+)?/g, &apos;/$1.css?v=&apos;+timestamp))
+    .pipe(gulp.dest(resDir+v.fileDir));
+}
+
+function commonTask(){
+var commonCss = resDir+&apos;common/*.css&apos;,
+    commonJs = resDir+&apos;common/*.js&apos;  ;
+gulp.task(&apos;jsCommon&apos;, function(){
+    return gulp.src(commonJs)
+            .pipe(uglify())
+            .pipe(gulp.dest(resDir+&apos;dist/common&apos;));
+});
+
+gulp.task(&apos;cssCommon&apos;, function(){
+    return gulp.src(commonCss)
+        .pipe(csso())
+        .pipe(gulp.dest(resDir+&apos;dist/common&apos;));
+});
+
+gulp.watch(commonJs, [&apos;jsCommon&apos;]);
+gulp.watch(commonCss, [&apos;cssCommon&apos;]);
+gulp.start([&apos;jsCommon&apos;, &apos;cssCommon&apos;]);
+}
+
+
+function configTask(config){
+var libsJs = config.libsJs,
+    libsCss = config.libsCss,
+    filename = config.filename,
+    mainCss = resDir+config.mainCss,
+    mainJs = resDir+config.mainJs ;
+libsJs = libsJs.map(function(v){
+    return (v = resDir + v);
+});
+libsCss = libsCss.map(function(v){
+    return (v = resDir + v);
+});
+gulp.task(&apos;jsLibs:&apos;+filename, function(){
+    return gulp.src(libsJs)
+        .pipe(uglify())
+        .pipe(concat(&apos;libs.min.js&apos;))
+        .pipe(gulp.dest(resDir+&apos;dist/&apos;+filename));
+});
+
+gulp.task(&apos;jsMain:&apos;+filename, function(){
+    return gulp.src(mainJs)
+            .pipe(uglify())
+            .pipe(gulp.dest(resDir+&apos;dist/&apos;+filename));
+});
+
+gulp.task(&apos;jsInit:&apos;+filename, [&apos;jsLibs:&apos;+filename, &apos;jsMain:&apos;+filename]);
+gulp.task(&apos;jsWatch:&apos;+filename, function(){
+    gulp.watch(libsJs, [&apos;jsLibs:&apos;+filename]);
+    gulp.watch(mainJs, [&apos;jsMain:&apos;+filename]);
+});
+
+gulp.task(&apos;cssLibs:&apos;+filename, function(){
+    return gulp.src(libsCss)
+        .pipe(csso())
+        .pipe(concat(&apos;libs.min.css&apos;))
+        .pipe(gulp.dest(resDir+&apos;dist/&apos;+filename));
+});
+
+gulp.task(&apos;cssMain:&apos;+filename, function(){
+    return gulp.src(mainCss)
+        .pipe(sass())
+        .pipe(csso())
+        .pipe(gulp.dest(resDir+&apos;dist/&apos;+filename));
+});
+gulp.task(&apos;cssInit:&apos;+filename, [&apos;cssLibs:&apos;+filename, &apos;cssMain:&apos;+filename]);
+gulp.task(&apos;cssWatch:&apos;+filename, function(){
+    gulp.watch(libsCss, [&apos;cssLibs:&apos;+filename]);
+    gulp.watch(mainCss, [&apos;cssMain:&apos;+filename]);
+});
+
+gulp.task(&apos;init:&apos;+filename, [&apos;jsInit:&apos;+filename, &apos;cssInit:&apos;+filename]);
+gulp.task(&apos;watch:&apos;+filename, [&apos;jsWatch:&apos;+filename, &apos;cssWatch:&apos;+filename]);
+gulp.start([&apos;init:&apos;+filename, &apos;watch:&apos;+filename]);
+}
+</code></pre></div></article></div></main><footer><div class="paginator"><a href="/2017/11/27/input-file-美化/" class="prev">上一篇</a><a href="/2017/04/15/http-method-区分/" class="next">下一篇</a></div><div class="copyright"><p>© 2015 - 2018 <a href="http://yoursite.com">chendong</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-65933410-1",'auto');ga('send','pageview');</script></body></html>

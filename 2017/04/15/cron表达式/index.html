@@ -1,0 +1,23 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> cron表达式 · CDBlog</title><meta name="description" content="cron表达式 - chendong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yoursite.com/atom.xml" title="CDBlog"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">cron表达式</h1><div class="post-info">Apr 15, 2017</div><div class="post-content"><p>cron 表达式是用来配置CronTrigger, 执行指定任务， 如： 周期性执行某个数据统计。</p>
+<h4 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h4><p>cron 表达式有7位， 格式如： “s m h d M w y” .</p>
+<ol>
+<li>s : 表示秒</li>
+<li>m : 表示分</li>
+<li>h : 表示小时</li>
+<li>d : 表示天</li>
+<li>M : 表示月</li>
+<li>w : 表示周</li>
+<li>y : 表示年</li>
+</ol>
+<p>示例：<br>“10 11 12 1 12 ? 2017”  ——  定时执行 2017/12/01 12:11:10<br>“5 6 /1 <em> </em> ?”          ——  每小时 6 分 5秒 执行<br>“<em> </em> <em> </em> <em> ?”           ——  立即执行<br>“0 12 17 /1 </em> ?”        ——  每天 17:12:0<br>“0 12 17 3 /1 ?”        ——  每月3号 17:12:0<br>“0 12 17 ? * 3,4”       ——  每周2,3 17：12：0</p>
+<ol>
+<li>最后一位 “年” 可省略</li>
+<li>星期数字是 1-7， 星期日为1，星期一为2</li>
+</ol>
+<h4 id="特殊字符的作用"><a href="#特殊字符的作用" class="headerlink" title="特殊字符的作用"></a>特殊字符的作用</h4><ol>
+<li>“/“ 这个符号代表该时间单位 进行重复执行。  “5 6 /1 <em> </em> ?” 表示每小时6分5秒， “5 /1 <em> </em> * ?” 表示每分5秒</li>
+<li>“*” 通配符，不进行匹配验证或者说任意数字都行</li>
+<li>“?” 验证匹配，用于和其他单位时间进行匹配验证， 如： 天 与 周 的验证匹配， 周 与 月 的验证等</li>
+</ol>
+<a id="more"></a>
+</div></article></div></main><footer><div class="paginator"><a href="/2017/04/15/http-method-区分/" class="prev">上一篇</a><a href="/2017/04/04/firefox自动填充问题，chrome同步请求渲染问题/" class="next">下一篇</a></div><div class="copyright"><p>© 2015 - 2018 <a href="http://yoursite.com">chendong</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-65933410-1",'auto');ga('send','pageview');</script></body></html>

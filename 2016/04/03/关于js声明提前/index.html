@@ -1,0 +1,44 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 关于js声明提前 · CDBlog</title><meta name="description" content="关于js声明提前 - chendong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yoursite.com/atom.xml" title="CDBlog"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">关于js声明提前</h1><div class="post-info">Apr 3, 2016</div><div class="post-content"><p>在一次笔试中碰到，得到面试官的指导。<br>题目大概是这样：</p>
+<pre><code>var a = 10;
+function test(){ 
+  a = 1;
+  console.log(a); 
+  var a;
+  console.log(a); 
+}
+
+test();   // 1  1
+console.log(a); // 10
+</code></pre><p>在test函数中，先 <code>var a;</code>  单纯的变量声明，会在同级函数中进行声明提前， 类似于 <code>function</code> 可以放到执行时的后面一样， 所以 test()中 a 声明为了一个局部变量，相当于 <code>var a; a = 1;</code>  操作。</p>
+<h4 id="变化与思考："><a href="#变化与思考：" class="headerlink" title="变化与思考："></a>变化与思考：</h4><pre><code>var a = 10;
+function test(){ 
+  a = 1;
+  console.log(a); 
+  var a = 20;
+  console.log(a); 
+}
+
+test();   // 1  20
+console.log(a); // 10
+</code></pre><p>发现没？ <code>var a = 20</code> 这部分相当于完成了两个操作， 1： 声明提前，将 a 设置为局部变量， 2：当执行到<code>var a = 20</code>时， 将a赋值为20。</p>
+<h4 id="验证："><a href="#验证：" class="headerlink" title="验证："></a>验证：</h4><pre><code>var a = 10;
+function test(){ 
+  console.log(a); 
+  var a;
+  console.log(a); 
+}
+
+test();   // undefined undefined  
+console.log(a); // 10
+</code></pre><p><code>var a</code> 声明提前，但没有赋值， 所以 undefined。</p>
+<pre><code>var a = 10;
+function test(){ 
+  console.log(a); 
+  var a = 1;
+  console.log(a); 
+}
+
+test();   // undefined 1  
+console.log(a); // 10
+</code></pre><p>同样的思路： 声明提前，a为局部变量，一开始未赋值， 为 undefined，后面赋值为 1</p>
+<a id="more"></a></div></article></div></main><footer><div class="paginator"><a href="/2016/04/03/关于一个评价效果的实现/" class="prev">上一篇</a><a href="/2016/03/27/fixed与input处理/" class="next">下一篇</a></div><div class="copyright"><p>© 2015 - 2018 <a href="http://yoursite.com">chendong</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-65933410-1",'auto');ga('send','pageview');</script></body></html>
