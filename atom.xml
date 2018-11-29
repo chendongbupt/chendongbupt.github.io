@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-09-16T06:03:16.091Z</updated>
+  <updated>2018-11-29T12:13:48.374Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>BizCharts调研</title>
+    <link href="http://yoursite.com/2018/11/29/BizCharts%E8%B0%83%E7%A0%94/"/>
+    <id>http://yoursite.com/2018/11/29/BizCharts调研/</id>
+    <published>2018-11-29T12:13:36.000Z</published>
+    <updated>2018-11-29T12:13:48.374Z</updated>
+    
+    <content type="html"><![CDATA[<p>BizCharts</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;BizCharts&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>关于ECharts_click事件的探索</title>
@@ -509,81 +531,6 @@
 &lt;/ol&gt;
 &lt;h4 id=&quot;password-密码域的自动填充&quot;&gt;&lt;a href=&quot;#password-密码域的自动填充&quot; class=&quot;headerlink&quot; title=&quot;password 密码域的自动填充&quot;&gt;&lt;/a&gt;password 密码域的自动填充&lt;/h4&gt;&lt;p&gt;如果一个 &lt;code&gt;&amp;lt;input type=&amp;quot;password&amp;quot;&amp;gt;&lt;/code&gt; 前面跟着一个 &lt;code&gt;&amp;lt;input type=&amp;quot;text&amp;quot;&amp;gt;&lt;/code&gt; ， firefox 会自动记录这个表单的帐号和密码， 即使这两个输入框不是帐号与密码的关系。。&lt;br&gt;解决方法：&lt;br&gt;&lt;code&gt;&amp;lt;input type=&amp;quot;text&amp;quot; name=&amp;quot;password&amp;quot; onfocus=&amp;quot;this.type=&amp;#39;password&amp;#39;&amp;quot;&amp;gt;&lt;/code&gt;&lt;/p&gt;
 &lt;h3 id=&quot;chrome-同步请求渲染问题&quot;&gt;&lt;a href=&quot;#chrome-同步请求渲染问题&quot; class=&quot;headerlink&quot; title=&quot;chrome 同步请求渲染问题&quot;&gt;&lt;/a&gt;chrome 同步请求渲染问题&lt;/h3&gt;
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>vue2结合select2,Highcharts</title>
-    <link href="http://yoursite.com/2017/03/26/vue2%E7%BB%93%E5%90%88select2-highCharts/"/>
-    <id>http://yoursite.com/2017/03/26/vue2结合select2-highCharts/</id>
-    <published>2017-03-26T11:27:59.000Z</published>
-    <updated>2018-03-24T13:42:19.518Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="vue2-中使用Highcharts"><a href="#vue2-中使用Highcharts" class="headerlink" title="vue2 中使用Highcharts"></a>vue2 中使用Highcharts</h3><p>stackoverflow 上的有答案 <a href="http://stackoverflow.com/questions/38777136/highcharts-in-vue-js-component" target="_blank" rel="noopener">http://stackoverflow.com/questions/38777136/highcharts-in-vue-js-component</a><br>因为画布要刷新，涉及到数据销毁, 需要执行 <code>this.target.destroy();</code> 。<br>需要注意的是，当数据处于隐藏状态时不能触发 <code>beforeDestroy</code> ， 即 <code>&lt;div v-show=&quot;isShow&quot;&gt;&lt;/div&gt;</code><br>刷新数据需要销毁之前的画布数据， 利用 <code>v-if</code> 进行动态销毁、新增。<br>    <template><br>        <div><br>            <chart :series="initSeries"></chart><br>        </div><br>    </template></p><pre><code>&lt;script&gt;var Highcharts = require(&apos;highcharts&apos;);export default {    name : &quot;Chart&quot;,    props : {    series : {        type: Array,        required: true    }    },    data : function() {    return {        target: undefined    }    },    mounted : function() {    this.target = Highcharts.chart(this.$el, {        title: {        text: &apos;Monthly Average Temperature&apos;,        x: -20 //center        },        subtitle: {        text: &apos;Source: WorldClimate.com&apos;,        x: -20        },        xAxis: {        categories: [&apos;Jan&apos;, &apos;Feb&apos;, &apos;Mar&apos;, &apos;Apr&apos;, &apos;May&apos;, &apos;Jun&apos;,        &apos;Jul&apos;, &apos;Aug&apos;, &apos;Sep&apos;, &apos;Oct&apos;, &apos;Nov&apos;, &apos;Dec&apos;]        },        yAxis: {        title: {        text: &apos;Temperature (°C)&apos;        },        plotLines: [{        value: 0,        width: 1,        color: &apos;#808080&apos;        }]    },    tooltip: {        valueSuffix: &apos;°C&apos;    },    legend: {        layout: &apos;vertical&apos;,        align: &apos;right&apos;,        verticalAlign: &apos;middle&apos;,            borderWidth: 0    },    series: this.series    });},beforeDestroy: function() {    this.target.destroy();},}&lt;/script&gt;</code></pre><h3 id="vue2-使用select2"><a href="#vue2-使用select2" class="headerlink" title="vue2 使用select2"></a>vue2 使用select2</h3><a id="more"></a><p><strong>先看官方示例</strong></p><pre><code>&lt;div id=&quot;el&quot;&gt;&lt;/div&gt;&lt;!-- using string template here to work around HTML &lt;option&gt; placement restriction --&gt;&lt;script type=&quot;text/x-template&quot; id=&quot;demo-template&quot;&gt;&lt;div&gt;    &lt;p&gt;Selected: {{ selected }}&lt;/p&gt;    &lt;select2 :options=&quot;options&quot; v-model=&quot;selected&quot;&gt;    &lt;option disabled value=&quot;0&quot;&gt;Select one&lt;/option&gt;    &lt;/select2&gt;&lt;/div&gt;&lt;/script&gt;&lt;script type=&quot;text/x-template&quot; id=&quot;select2-template&quot;&gt;&lt;select&gt;    &lt;slot&gt;&lt;/slot&gt;&lt;/select&gt;&lt;/script&gt;Vue.component(&apos;select2&apos;, {props: [&apos;options&apos;, &apos;value&apos;],template: &apos;#select2-template&apos;,mounted: function () {    var vm = this    $(this.$el)    .val(this.value)    // init select2    .select2({ data: this.options })    // emit event on change.    .on(&apos;change&apos;, function () {        vm.$emit(&apos;input&apos;, this.value)    })},watch: {    value: function (value) {    // update value    $(this.$el).val(value)    },    options: function (options) {    // update options    $(this.$el).select2({ data: options })    }},destroyed: function () {    $(this.$el).off().select2(&apos;destroy&apos;)}})var vm = new Vue({el: &apos;#el&apos;,template: &apos;#demo-template&apos;,data: {    selected: 0,    options: [    { id: 1, text: &apos;Hello&apos; },    { id: 2, text: &apos;World&apos; }    ]}})</code></pre><p>上面是官方的代码有个问题， 就是当 一个事件，比如 <code>click</code> 让select的值发生改变，但select2不会自动进行切换。</p><p>改动下select2组件，赋值后使select2同步变化。<br>下面是我自己改进后的：</p><pre><code>Vue.component(&apos;select2&apos;, {props: [&apos;options&apos;, &apos;value&apos;],template: &apos;#select2-template&apos;,mounted: function () {    var vm = this    $(this.$el)    // .html(&apos;&apos;)    // init select2    .select2({ data: this.options })    .val(this.value)    .trigger(&apos;change&apos;)    // emit event on change.    .on(&apos;change&apos;, function () {        vm.$emit(&apos;input&apos;, this.value)    })},    watch: {    value: function (value, old) {    // update value    if ( value === old )        return ;    console.log(&apos;change value: &apos;+this.value+&apos;-- old: &apos;+old)    $(this.$el).val(value).trigger(&apos;change&apos;)    },    options: function (options) {    // update options    console.log(&apos;value: &apos;+this.value)    $(this.$el).html(&apos;&apos;).select2({ data: options }).trigger(&apos;change&apos;)    }},destroyed: function () {    $(this.$el).off().select2(&apos;destroy&apos;)}})var vm = new Vue({el: &apos;#el&apos;,template: &apos;#demo-template&apos;,data: {    selected: 2,    options: [    { id: 1, text: &apos;Hello&apos; },    { id: 2, text: &apos;World&apos; }    ]},methods:{    tt: function(){    this.options = [{id:33, text:&apos;sdfs&apos;}, {id:24, text:34}]    },    tt1: function(){    this.options = [{id:44, text:&apos;师傅带&apos;}, {id:4, text:&apos;放大&apos;}];    var self = this;    // this.$nextTick(function(){this.selected = 4;});       setTimeout(function(){self.selected = 4;}, 0);           }}})</code></pre>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;vue2-中使用Highcharts&quot;&gt;&lt;a href=&quot;#vue2-中使用Highcharts&quot; class=&quot;headerlink&quot; title=&quot;vue2 中使用Highcharts&quot;&gt;&lt;/a&gt;vue2 中使用Highcharts&lt;/h3&gt;&lt;p&gt;stackoverflow 上的有答案 &lt;a href=&quot;http://stackoverflow.com/questions/38777136/highcharts-in-vue-js-component&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;http://stackoverflow.com/questions/38777136/highcharts-in-vue-js-component&lt;/a&gt;&lt;br&gt;因为画布要刷新，涉及到数据销毁, 需要执行 &lt;code&gt;this.target.destroy();&lt;/code&gt; 。&lt;br&gt;需要注意的是，当数据处于隐藏状态时不能触发 &lt;code&gt;beforeDestroy&lt;/code&gt; ， 即 &lt;code&gt;&amp;lt;div v-show=&amp;quot;isShow&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;&lt;/code&gt;&lt;br&gt;刷新数据需要销毁之前的画布数据， 利用 &lt;code&gt;v-if&lt;/code&gt; 进行动态销毁、新增。&lt;br&gt;    &lt;template&gt;&lt;br&gt;        &lt;div&gt;&lt;br&gt;            &lt;chart :series=&quot;initSeries&quot;&gt;&lt;/chart&gt;&lt;br&gt;        &lt;/div&gt;&lt;br&gt;    &lt;/template&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;&amp;lt;script&amp;gt;
-var Highcharts = require(&amp;apos;highcharts&amp;apos;);
-export default {
-    name : &amp;quot;Chart&amp;quot;,
-    props : {
-    series : {
-        type: Array,
-        required: true
-    }
-    },
-    data : function() {
-    return {
-        target: undefined
-    }
-    },
-    mounted : function() {
-    this.target = Highcharts.chart(this.$el, {
-        title: {
-        text: &amp;apos;Monthly Average Temperature&amp;apos;,
-        x: -20 //center
-        },
-        subtitle: {
-        text: &amp;apos;Source: WorldClimate.com&amp;apos;,
-        x: -20
-        },
-        xAxis: {
-        categories: [&amp;apos;Jan&amp;apos;, &amp;apos;Feb&amp;apos;, &amp;apos;Mar&amp;apos;, &amp;apos;Apr&amp;apos;, &amp;apos;May&amp;apos;, &amp;apos;Jun&amp;apos;,
-        &amp;apos;Jul&amp;apos;, &amp;apos;Aug&amp;apos;, &amp;apos;Sep&amp;apos;, &amp;apos;Oct&amp;apos;, &amp;apos;Nov&amp;apos;, &amp;apos;Dec&amp;apos;]
-        },
-        yAxis: {
-        title: {
-        text: &amp;apos;Temperature (°C)&amp;apos;
-        },
-        plotLines: [{
-        value: 0,
-        width: 1,
-        color: &amp;apos;#808080&amp;apos;
-        }]
-    },
-    tooltip: {
-        valueSuffix: &amp;apos;°C&amp;apos;
-    },
-    legend: {
-        layout: &amp;apos;vertical&amp;apos;,
-        align: &amp;apos;right&amp;apos;,
-        verticalAlign: &amp;apos;middle&amp;apos;,
-            borderWidth: 0
-    },
-    series: this.series
-    });
-},
-beforeDestroy: function() {
-    this.target.destroy();
-},
-}
-&amp;lt;/script&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&quot;vue2-使用select2&quot;&gt;&lt;a href=&quot;#vue2-使用select2&quot; class=&quot;headerlink&quot; title=&quot;vue2 使用select2&quot;&gt;&lt;/a&gt;vue2 使用select2&lt;/h3&gt;
     
     </summary>
     
