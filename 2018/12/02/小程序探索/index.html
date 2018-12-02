@@ -1,1 +1,203 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 小程序探索 · CDBlog</title><meta name="description" content="小程序探索 - chendong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yoursite.com/atom.xml" title="CDBlog"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">小程序探索</h1><div class="post-info">Dec 2, 2018</div><div class="post-content"></div></article></div></main><footer><div class="paginator"><a href="/2018/11/29/BizCharts调研/" class="next">NEXT</a></div><div class="copyright"><p>© 2015 - 2018 <a href="http://yoursite.com">chendong</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-65933410-1",'auto');ga('send','pageview');</script></body></html>
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 小程序探索 · CDBlog</title><meta name="description" content="小程序探索 - chendong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yoursite.com/atom.xml" title="CDBlog"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">小程序探索</h1><div class="post-info">Dec 2, 2018</div><div class="post-content"><h3 id="微信小程序"><a href="#微信小程序" class="headerlink" title="微信小程序"></a>微信小程序</h3><ul>
+<li>小程序需要申请账号，主体可以是企业，也可以是个人，里面有小程序的AppID，配置服务地址(比如localhost)</li>
+<li>小程序开发工具，创建工程需要AppID</li>
+<li>开发工具包含代码编辑器+调试器+客户端模拟器+版本管理器，基本做到了一站式开发</li>
+<li>模拟器只有ios和 nexus，再加上原生组件，真机调试不可少</li>
+</ul>
+<h4 id="框架"><a href="#框架" class="headerlink" title="框架"></a>框架</h4><p>整个框架像个大杂烩，整体设计并不统一，包含了OO、函数式和面向过程。或许，是为了不同技术栈背景的开发人员都能找到一套适合的开发模式。</p>
+<ul>
+<li>样式层上来看，wxss像个css的子集，缺少了一些特性支持</li>
+<li>模板wxml来看，Mustache语法，类似ng1.js的语法，数据与视图绑定，但数据流不是双向，不是响应式，而是类似React语法的setData，异步单项数据流</li>
+<li>逻辑层js中，Page(Object)类似于Vue1的data设置，逻辑方法写法，同时也包含生命周期函数，可直接访问路由</li>
+<li>wxs和template可直接在wxml中扩展，分别对应了script和模板引擎，可在多个地方引入调用，虽然提供了组件，但开发并不是组件化</li>
+</ul>
+<h5 id="文件结构"><a href="#文件结构" class="headerlink" title="文件结构"></a>文件结构</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">- pages </span><br><span class="line">  - pageA  </span><br><span class="line">    - pageA.js  </span><br><span class="line">    - pageA.wxml  </span><br><span class="line">    - pageA.wxss  </span><br><span class="line">    - pageA.json </span><br><span class="line">  - pageB  </span><br><span class="line">    - pageB.js  </span><br><span class="line">    - pageB.wxml  </span><br><span class="line">    - pageB.wxss  </span><br><span class="line">    - pageB.json</span><br><span class="line">- app.js</span><br><span class="line">- app.wxss</span><br><span class="line">- app.json</span><br></pre></td></tr></table></figure>
+<p>.json 属于配置文件，.wxss 样式文件，.wxml模板，.js(.ts) 逻辑文件</p>
+<p>app.json 是全局配置，pages下的页面配置，只有窗口window部分。</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th style="text-align:center">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pages</td>
+<td style="text-align:center">页面路径入口列表 </td>
+</tr>
+<tr>
+<td>window</td>
+<td style="text-align:center">窗口样式 </td>
+</tr>
+<tr>
+<td>tabBar</td>
+<td style="text-align:center">底部tab </td>
+</tr>
+<tr>
+<td>networkTimeout</td>
+<td style="text-align:center">超时时间 </td>
+</tr>
+<tr>
+<td>debug</td>
+<td style="text-align:center">是否开启debug，默认关闭 </td>
+</tr>
+<tr>
+<td>functionalPages</td>
+<td style="text-align:center">是否启用插件，默认关闭 </td>
+</tr>
+<tr>
+<td>subpackages</td>
+<td style="text-align:center">分包结构配置 </td>
+</tr>
+<tr>
+<td>workers</td>
+<td style="text-align:center">Worker放置目录 </td>
+</tr>
+<tr>
+<td>requiredBackgroundModes</td>
+<td style="text-align:center">需要在后台使用的能力，如音乐播放 </td>
+</tr>
+<tr>
+<td>plugins</td>
+<td style="text-align:center">使用的插件 </td>
+</tr>
+<tr>
+<td>preloadRule</td>
+<td style="text-align:center">分包预下载规则 </td>
+</tr>
+<tr>
+<td>resizable</td>
+<td style="text-align:center">iPad下是否直接屏幕旋转，默认关闭 </td>
+</tr>
+<tr>
+<td>navigateToMiniProgramAppIdList</td>
+<td style="text-align:center">需要跳转的小程序列表 </td>
+</tr>
+<tr>
+<td>usingComponents</td>
+<td style="text-align:center">全局自定义组件配置 </td>
+</tr>
+</tbody>
+</table>
+<p>pages类似于路由，配置页面的入口路径， 例如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;pages&quot;:[ </span><br><span class="line">  &quot;pages/pageA/pageA&quot;, </span><br><span class="line">  &quot;pages/pageB/pageB&quot;</span><br><span class="line">  ]</span><br></pre></td></tr></table></figure></p>
+<h5 id="逻辑层"><a href="#逻辑层" class="headerlink" title="逻辑层"></a>逻辑层</h5><ul>
+<li>App(Object) 注册App, Page(Object) 注册页面</li>
+<li>data:{}, 初始数据</li>
+<li>Page.route, 得到当前页面路径</li>
+<li>Page.prototype.setData(data, function(){}),更新page中的data</li>
+<li>生命周期函数，onLoad()：页面加载时触发，onShow()：页面显示时触发，onReady()：页面初次渲染完成是触发，onHide()：页面隐藏时触发，onUnload()：页面卸载时触发</li>
+</ul>
+<h5 id="视图层"><a href="#视图层" class="headerlink" title="视图层"></a>视图层</h5><p><strong>wxml</strong> 类似于html，用于页面结构，数据绑定是Mustache语法，类似于ng1.js。</p>
+<p>列表渲染<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// 默认下标为index，默认值为item</span><br><span class="line">// 可以用wx:for-index, wx:for-item 自定义</span><br><span class="line">&lt;view wx:for=&quot;&#123;&#123;array&#125;&#125;&quot; wx:for-index=&quot;cusIndex&quot; wx:for-item=&quot;cusItem&quot;&gt;</span><br><span class="line">&#123;&#123;cusItem&#125;&#125;</span><br><span class="line">&lt;/view&gt;</span><br></pre></td></tr></table></figure></p>
+<p>条件渲染<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;view wx:if=&quot;&#123;&#123;condition&#125;&#125;&quot;&gt;condition is true&lt;/view&gt;</span><br><span class="line">&lt;view wx:elif=&quot;&#123;&#123;condition2&#125;&#125;&quot;&gt;condition2 is true&lt;/view&gt;</span><br><span class="line">&lt;view wx:else&gt;else case&lt;/view&gt;</span><br></pre></td></tr></table></figure></p>
+<p>模板 template，有点类似之前的各种模板引擎，比如handlebars,artTemplate，就是定义一段代码片段，方便在多个地方多次调用。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 定义一个模板，名称为 tmpName</span><br><span class="line">&lt;template name=&quot;tmpName&quot;&gt;</span><br><span class="line">// wxml code</span><br><span class="line">&lt;text&gt;&#123;&#123;a&#125;&#125;&lt;/text&gt;</span><br><span class="line">&lt;text&gt;&#123;&#123;b&#125;&#125;&lt;/text&gt;</span><br><span class="line">&lt;/template&gt;</span><br><span class="line"></span><br><span class="line">// 使用模板tmpName, 传参 data: &#123; obj:&#123;a:1,b:2&#125; &#125;</span><br><span class="line">&lt;template is=&quot;tmpName&quot; data=&quot;&#123;&#123;...obj&#125;&#125;&quot; /&gt;</span><br></pre></td></tr></table></figure></p>
+<p>模板有作用域，只能使用data传参的数据，或模板中<wxs>导出的模块数据。</wxs></p>
+<p>事件绑定的写法同组件的属性，以 key、value 的形式。</p>
+<ul>
+<li>key 以bind或catch开头，然后跟上事件的类型，如bindtap、catchtouchstart。自基础库版本 1.5.0 起，在<strong>非原生组件</strong>中，bind和catch后可以紧跟一个冒号，其含义不变，如bind:tap、catch:touchstart。</li>
+<li>value 是一个字符串，需要在对应的 Page 中定义同名的函数。不然当触发事件的时候会报错。</li>
+<li>catch事件绑定可以阻止冒泡事件向上冒泡，capture-catch关键字，将中断捕获阶段和取消冒泡阶段</li>
+<li><strong>原生组件</strong>的事件监听不能使用 bind:eventname 的写法，只支持 bindeventname。原生组件也不支持 catch 和 capture 的事件绑定方式。</li>
+</ul>
+<p>引用包括<code>import</code> <code>include</code>两种方式，又是以前的资源模板用法。<br>import只引入目标中定义的模板，不包含目标文件中import的模板, <import src=""> 引入。<br>include包含目标文件中除了<code>&lt;template&gt;&lt;/template&gt; &lt;wxs /&gt;</code>外的整个代码块，但会解析模板中的<code>&lt;template is=&quot;&quot; /&gt;， &lt;include src=&quot;&quot; /&gt;</code>引入。</import></p>
+<hr>
+<p><strong>wxss</strong> 可以看做”wx css”。相比css，增加了尺寸单位rpx。<br>选择器也有变化，支持class id element和伪类::before,::after， 不支持:hover :nth-child :focus等伪类， 不支持兄弟选择器。</p>
+<hr>
+<p><strong>wsx</strong> 类似于 <code>&lt;script&gt;</code>，是wxml模板中的脚本。示例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;wxs module=&quot;m1&quot;&gt;</span><br><span class="line">var msg = &quot;hello world&quot;;</span><br><span class="line"></span><br><span class="line">module.exports.message = msg;</span><br><span class="line">&lt;/wxs&gt;</span><br><span class="line"></span><br><span class="line">&lt;view&gt; &#123;&#123;m1.message&#125;&#125; &lt;/view&gt;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>wxs 的运行环境和其他 javascript 代码是隔离的，wxs 中不能调用其他 javascript 文件中定义的函数，也不能调用小程序提供的API。</li>
+<li>wxs 函数不能作为组件的事件回调。</li>
+<li>wxs 如果module和exports和data中的数据重名，将会覆盖</li>
+<li>.wxs文件可以被其他模块require引入</li>
+</ul>
+<hr>
+<p>分包加载是将小程序划分成不同的子包，在构建时打包成不同的分包，用户在使用时按需进行加载，需要在app.json中的subpackages中配置。</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>root</td>
+<td style="text-align:center">分包根目录 </td>
+</tr>
+<tr>
+<td>name</td>
+<td style="text-align:center">分包别名，分包预下载时可以使用 </td>
+</tr>
+<tr>
+<td>pages</td>
+<td style="text-align:center">分包页面路径 </td>
+</tr>
+<tr>
+<td>independent</td>
+<td style="text-align:center">是否是独立分包 </td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>tabBar页面必须在主包app内</li>
+<li>分包的根目录必须分开，不能嵌套</li>
+<li>分包之间不能相互import require资源</li>
+</ul>
+<hr>
+<h4 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h4><h5 id="视图容器"><a href="#视图容器" class="headerlink" title="视图容器"></a>视图容器</h5><p>提供了外层基本容器View，覆盖容器cover-view，还有常用的轮播图swiper。<br>更注重block容器，没有行内的grid、flex。</p>
+<h5 id="基础内容"><a href="#基础内容" class="headerlink" title="基础内容"></a>基础内容</h5><p>仅有9种icon… text相当于span，属于inline， 还有一个有用的progress进度条。</p>
+<h5 id="表单组件"><a href="#表单组件" class="headerlink" title="表单组件"></a>表单组件</h5><p>包含常用的 button checkbox radio swtich， 还有input textarea， 没有类似table list的组件。<br>picker包含了单选项select功能，还有级联cascader功能，以及时间 timepicker， 日期datepicker，没有时间范围选择功能。</p>
+<h5 id="导航"><a href="#导航" class="headerlink" title="导航"></a>导航</h5><p>navigator跳转，可以满足当前小程序的跳转，也可以跳转到其他小程序</p>
+<h5 id="媒体、地图、画布"><a href="#媒体、地图、画布" class="headerlink" title="媒体、地图、画布"></a>媒体、地图、画布</h5><p>包括 video、image、camera等媒体组件，map、canvas是原生组件。</p>
+<hr>
+<p>小程序的组件库不多，但对于手机端还算足够用。封装了使用频次较高的swiper，picker，但资源型组件，比如icon，内容实在太少。此外，还有<strong>原生组件</strong>的限制，参考<a href="https://developers.weixin.qq.com/miniprogram/dev/component/native-component.html" target="_blank" rel="noopener">https://developers.weixin.qq.com/miniprogram/dev/component/native-component.html</a> 。</p>
+<hr>
+<h4 id="配置ts自动编译"><a href="#配置ts自动编译" class="headerlink" title="配置ts自动编译"></a>配置ts自动编译</h4><ol start="0">
+<li>前置，需要npm安装typescript</li>
+<li><p>在package.json “scripts”中增加ts文件监听指令 “watch”: “tsc -w”</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">&quot;tsc&quot;: &quot;./node_modules/typescript/bin/tsc&quot;,</span><br><span class="line">&quot;compile&quot;: &quot;tsc&quot;,</span><br><span class="line">&quot;watch&quot;: &quot;tsc -w&quot;</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>增加编译模式，入口是page/index/index,参数为指令名称watch</p>
+</li>
+<li>然后编译模式，切换到新增的编译模式</li>
+</ol>
+<hr>
+<h5 id="衍生的框架"><a href="#衍生的框架" class="headerlink" title="衍生的框架"></a>衍生的框架</h5><p>wepy <a href="https://github.com/Tencent/wepy" target="_blank" rel="noopener">https://github.com/Tencent/wepy</a></p>
+<p>腾讯出的框架，小程序组件化框架，15k+star</p>
+<p>总结要点:</p>
+<ul>
+<li>类Vue开发风格，组件化 es6 es7， wepy-cli</li>
+<li>小程序细节优化，如请求列队，事件优化等</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>脏值检测封装setData，上一个这样做的ng1,性能堪忧</li>
+<li>类Vue，但开发体验不好</li>
+<li>基础组件问题多</li>
+</ul>
+<hr>
+<p>mpvue <a href="https://github.com/Meituan-Dianping/mpvue" target="_blank" rel="noopener">https://github.com/Meituan-Dianping/mpvue</a></p>
+<p>美团开发，基于 Vue.js 的小程序开发框架，从底层支持 Vue.js 语法和构建工具体系， 14.5k+star</p>
+<ul>
+<li>相比wepy, 完整的 Vue.js 开发体验</li>
+<li>彻底的组件化开发能力</li>
+<li>H5 代码转换编译成小程序目标代码的能力</li>
+</ul>
+<p>缺点：<br>有且只能使用单文件组件（.vue 组件）的形式进行支持，详细的不支持列表.</p>
+<ul>
+<li>不支持 纯-HTML</li>
+<li>不支持过滤器</li>
+<li>不支持函数</li>
+<li>暂不支持在组件引用时，在组件上定义 click 等原生事件、v-show（可用 v-if 代替）和 class style 等样式属性</li>
+<li>Slot（scoped 暂时还没做支持）</li>
+<li>动态组件</li>
+<li>异步组件</li>
+<li>inline-template</li>
+<li>X-Templates</li>
+<li>keep-alive</li>
+<li>transition</li>
+<li>class</li>
+<li>style</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a href="/2018/11/29/BizCharts调研/" class="next">下一篇</a></div><div class="copyright"><p>© 2015 - 2018 <a href="http://yoursite.com">chendong</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-65933410-1",'auto');ga('send','pageview');</script></body></html>
