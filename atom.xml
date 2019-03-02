@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-03-02T13:19:00.476Z</updated>
+  <updated>2019-03-02T13:50:35.223Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>排序与树的遍历算法实现</title>
+    <link href="http://yoursite.com/2019/03/02/%E6%8E%92%E5%BA%8F%E4%B8%8E%E6%A0%91%E7%9A%84%E9%81%8D%E5%8E%86%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0/"/>
+    <id>http://yoursite.com/2019/03/02/排序与树的遍历算法实现/</id>
+    <published>2019-03-02T13:44:28.000Z</published>
+    <updated>2019-03-02T13:50:35.223Z</updated>
+    
+    <content type="html"><![CDATA[<p>// 冒泡<br>function sort1(arr){<br>  for ( let i=0, len=arr.length; i&lt;len-1; i++ ){<br>    for ( let j=i+1; j&lt;=len-1; j++ ){<br>      if ( arr[i] &gt; arr[j] ){<br>        let tmp = arr[i];<br>        arr[i] = arr[j];<br>        arr[j] = tmp;<br>      }<br>    }<br>  }<br>  return arr;<br>}</p><p>// 插入<br>function sort2(arr){<br>  for ( let i=1, len=arr.length; i&lt;=len-1; i++ ){<br>    var tmp = arr[i];<br>    for ( var j=i-1; j&gt;=0; j– ){<br>      if ( arr[j] &gt; tmp ){<br>        arr[j+1] = arr[j];<br>      }<br>      else {<br>        break ;<br>      }<br>    }<br>    arr[j+1] = tmp;<br>  }<br>  return arr;<br>}</p><a id="more"></a><p>// 快排<br>function part(arr, start, end){<br>  let pivot = arr[start];<br>  while (start &lt; end) {<br>    while (start &lt; end &amp;&amp; arr[end] &gt; pivot) {<br>      –end;<br>    }<br>    arr[start] = arr[end];<br>    while (start &lt; end &amp;&amp; arr[start] &lt;= pivot) {<br>      ++start;<br>    }<br>    arr[end] = arr[start];<br>  }<br>  arr[start] = pivot;<br>  return start;<br>}</p><p>function sort3(arr, start, end){<br>  if ( start &gt;= end ) return arr;<br>  let index = part(arr, start, end);<br>  sort3(arr, start, index-1);<br>  sort3(arr, index+1, end)<br>  return arr;<br>}<br>function sort(arr){<br>  return sort3(arr,0,arr.length-1)<br>}</p><hr><p>const tree = {<br>  value : 1,<br>  children: [<br>    {value:’1-1’, children:[{value:’1-1-1’,children:[]}]},<br>    {value:’1-2’, children:[{value:’1-2-1’, children:[{value:’1-2-1-1’}]},{value:’1-2-2’,children:[]}]},<br>    {value:’1-3’, children:[{value:’1-3-1’},{value:’1-3-2’}]}<br>  ]<br>}</p><p>// 广度优先<br>function spread(tree){<br>  var nodeArr = [];<br>  var valArr = [];</p><p>  nodeArr.push(tree);<br>  while ( nodeArr.length &gt; 0 ){<br>    let node = nodeArr.shift();<br>    valArr.push(node.value);<br>    node.children &amp;&amp; node.children.map(v=&gt;{<br>      nodeArr.push(v);<br>    });<br>  }<br>  return valArr;<br>}</p><p>// 深度优先<br>function deep(tree){<br>  let nodeArr = [], valArr = [];<br>  nodeArr.push(tree);<br>  while ( nodeArr.length &gt; 0 ){<br>    let node = nodeArr.shift();<br>    valArr.push(node.value);<br>    if ( node.children ){<br>      for ( let len=node.children.length-1; len&gt;=0 ;len– ){<br>        nodeArr.unshift(node.children[len]);<br>      }<br>    }<br>  }<br>  return valArr;<br>}</p>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;// 冒泡&lt;br&gt;function sort1(arr){&lt;br&gt;  for ( let i=0, len=arr.length; i&amp;lt;len-1; i++ ){&lt;br&gt;    for ( let j=i+1; j&amp;lt;=len-1; j++ ){&lt;br&gt;      if ( arr[i] &amp;gt; arr[j] ){&lt;br&gt;        let tmp = arr[i];&lt;br&gt;        arr[i] = arr[j];&lt;br&gt;        arr[j] = tmp;&lt;br&gt;      }&lt;br&gt;    }&lt;br&gt;  }&lt;br&gt;  return arr;&lt;br&gt;}&lt;/p&gt;
+&lt;p&gt;// 插入&lt;br&gt;function sort2(arr){&lt;br&gt;  for ( let i=1, len=arr.length; i&amp;lt;=len-1; i++ ){&lt;br&gt;    var tmp = arr[i];&lt;br&gt;    for ( var j=i-1; j&amp;gt;=0; j– ){&lt;br&gt;      if ( arr[j] &amp;gt; tmp ){&lt;br&gt;        arr[j+1] = arr[j];&lt;br&gt;      }&lt;br&gt;      else {&lt;br&gt;        break ;&lt;br&gt;      }&lt;br&gt;    }&lt;br&gt;    arr[j+1] = tmp;&lt;br&gt;  }&lt;br&gt;  return arr;&lt;br&gt;}&lt;/p&gt;
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>初次开发hybrid H5的坑及方案</title>
@@ -505,29 +524,6 @@
     
     </summary>
     
-    
-  </entry>
-  
-  <entry>
-    <title>restful http method</title>
-    <link href="http://yoursite.com/2017/04/15/http-method-%E5%8C%BA%E5%88%86/"/>
-    <id>http://yoursite.com/2017/04/15/http-method-区分/</id>
-    <published>2017-04-15T11:47:43.000Z</published>
-    <updated>2018-03-24T13:40:37.553Z</updated>
-    
-    <content type="html"><![CDATA[<p>POST GET PUT DELETE 4种方式大概类似与 “CRUD”.</p><p>POST 相当于 新建资源<br>GET 从服务端接受资源<br>PUT 更新资源<br>DELETE 删除资源</p><p><em>幂等的概念：  f(x) = f( f( f( f(x) ) ) )</em></p><h4 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h4><p>GET  get 是安全的， 即不会更改服务端资源， 一个GET请求， 1次或者多次， 得到的结果是一样的， 具有幂等性。<br>POST 新建资源会有副作用，即 会增加资源， 不是安全的， 多次请求会产生多个新建资源，是非幂等的。<br>PUT 更新资源，提交相同的更新数据，1次更新或者多次更新， 更新的资源是一样的， 所以是 幂等的。<br>DELETE 一次或多次删除一个资源， 结果都是删除目标资源， 是幂等的</p><a id="more"></a>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;POST GET PUT DELETE 4种方式大概类似与 “CRUD”.&lt;/p&gt;
-&lt;p&gt;POST 相当于 新建资源&lt;br&gt;GET 从服务端接受资源&lt;br&gt;PUT 更新资源&lt;br&gt;DELETE 删除资源&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;幂等的概念：  f(x) = f( f( f( f(x) ) ) )&lt;/em&gt;&lt;/p&gt;
-&lt;h4 id=&quot;区别&quot;&gt;&lt;a href=&quot;#区别&quot; class=&quot;headerlink&quot; title=&quot;区别&quot;&gt;&lt;/a&gt;区别&lt;/h4&gt;&lt;p&gt;GET  get 是安全的， 即不会更改服务端资源， 一个GET请求， 1次或者多次， 得到的结果是一样的， 具有幂等性。&lt;br&gt;POST 新建资源会有副作用，即 会增加资源， 不是安全的， 多次请求会产生多个新建资源，是非幂等的。&lt;br&gt;PUT 更新资源，提交相同的更新数据，1次更新或者多次更新， 更新的资源是一样的， 所以是 幂等的。&lt;br&gt;DELETE 一次或多次删除一个资源， 结果都是删除目标资源， 是幂等的&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="http method" scheme="http://yoursite.com/tags/http-method/"/>
     
   </entry>
   
