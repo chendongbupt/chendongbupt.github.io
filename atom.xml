@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2018-12-06T11:56:30.325Z</updated>
+  <updated>2019-03-02T13:16:43.053Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>初次开发hybrid H5的坑及方案</title>
+    <link href="http://yoursite.com/2019/03/02/%E5%88%9D%E6%AC%A1%E5%BC%80%E5%8F%91hybrid-H5%E7%9A%84%E5%9D%91%E5%8F%8A%E6%96%B9%E6%A1%88/"/>
+    <id>http://yoursite.com/2019/03/02/初次开发hybrid-H5的坑及方案/</id>
+    <published>2019-03-02T11:19:06.000Z</published>
+    <updated>2019-03-02T13:16:43.053Z</updated>
+    
+    <content type="html"><![CDATA[<h4 id="hybrid-h5"><a href="#hybrid-h5" class="headerlink" title="hybrid h5"></a>hybrid h5</h4><p>hybrid 翻译为杂交， hyrid h5 是指将web前端页面嵌入到原生APP( iOS和Android )中的运行的方案。<br>相对于原生开发，web前端的开发发展时间更长、从业人员更多、生态更为繁荣，而且开发效率也更高。<br>但web并不能直接调用原生API，而且运行内存、调度也差与原生，流畅性就显得不足。<br>基于以上原因，协调开发资源，将一些展示性、交互不多的页面让web开发，嵌入原生Webview中运行，就可以大大提高APP开发效率，利用团队开发资源。</p><h4 id="h5调用原生方法"><a href="#h5调用原生方法" class="headerlink" title="h5调用原生方法"></a>h5调用原生方法</h4><p>参考 (<a href="https://github.com/marcuswestin/WebViewJavascriptBridge" target="_blank" rel="noopener">https://github.com/marcuswestin/WebViewJavascriptBridge</a>)</p><ol><li>直接注入调用<br>iOS能访问Webview下全局对象window，所以可以将js方法挂载到window上，然后iOS调用；<br>安卓的话可以注入方法到window上，然后js调用这原生方法。</li><li>协议监听<br>原生API能拦截Webview的网络请求，url根据协议传参，原生解析后执行，将结果挂载到window上。<br>js的url实现方法：<br> 2.1 window.location.href<br> 2.2 利用页面中嵌套的iframe的url(将iframe的长宽都设为很小或者0，取到数据后再移除这个iframe)建议使用②iframe的方式，因为如果我们连续多次修改window.location.href的值，在Native层只能接收到最后一次请求，前面的请求都会被忽略掉。</li><li>引入JsBridge（安卓）和 WebViewJavascriptBridge（iOS）库的方案<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">// 安卓运行</span><br><span class="line">// 如果WebViewJavascriptBridge已挂载，直接执行，否则，等待WebViewJavascriptBridgeReady时间触发，即原生方法已挂载后执行</span><br><span class="line">if (window.WebViewJavascriptBridge) &#123;</span><br><span class="line">    //do your work here</span><br><span class="line">&#125; else &#123;</span><br><span class="line">    document.addEventListener(</span><br><span class="line">        &apos;WebViewJavascriptBridgeReady&apos;</span><br><span class="line">        , function() &#123;</span><br><span class="line">            //do your work here</span><br><span class="line">        &#125;,</span><br><span class="line">        false</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// iOS运行</span><br><span class="line">function setupWebViewJavascriptBridge(callback) &#123;</span><br><span class="line">if (window.WebViewJavascriptBridge) &#123; return callback(WebViewJavascriptBridge); &#125;</span><br><span class="line">if (window.WVJBCallbacks) &#123; return window.WVJBCallbacks.push(callback); &#125;</span><br><span class="line">window.WVJBCallbacks = [callback];</span><br><span class="line">var WVJBIframe = document.createElement(&apos;iframe&apos;);</span><br><span class="line">WVJBIframe.style.display = &apos;none&apos;;</span><br><span class="line">WVJBIframe.src = &apos;https://__bridge_loaded__&apos;;</span><br><span class="line">document.documentElement.appendChild(WVJBIframe);</span><br><span class="line">setTimeout(function() &#123; document.documentElement.removeChild(WVJBIframe) &#125;, 0)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ol><p>此次项目，我们直接进行的注入调用。<br>h5中涉及到摄像头拍照的功能，由原生提供，注入到h5中，挂载到window.api上，js则可以直接调用方法。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">window.api.camera(params, function()&#123;&#125;)    // 调用原生注入的API，参数不可缺少，传递params参数以及回调函数</span><br></pre></td></tr></table></figure></p><p>html中引入一个固定名称的js文件供安卓注入，比如 android.js， 兼容安卓5，文件不能为空，所以可以声明一个无关紧要的变量或者console。</p><h4 id="兼容遇到的问题"><a href="#兼容遇到的问题" class="headerlink" title="兼容遇到的问题"></a>兼容遇到的问题</h4><ol><li>安卓5下需要对Promise reject进行处理，否在抛错</li><li>es6 spread语法， …obj， 低版本下需要确定obj为Object,如果为’’，会抛错</li><li>iOS调用js方法时，内部不能有Promise，否则会卡死，不执行回调</li><li>用iframe时，iOS会需要src同源，否则会解析失败</li></ol>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h4 id=&quot;hybrid-h5&quot;&gt;&lt;a href=&quot;#hybrid-h5&quot; class=&quot;headerlink&quot; title=&quot;hybrid h5&quot;&gt;&lt;/a&gt;hybrid h5&lt;/h4&gt;&lt;p&gt;hybrid 翻译为杂交， hyrid h5 是指将web前端页面嵌入到原生APP(
+      
+    
+    </summary>
+    
+    
+      <category term="H5" scheme="http://yoursite.com/tags/H5/"/>
+    
+  </entry>
   
   <entry>
     <title>小程序探索</title>
@@ -508,46 +531,6 @@
     
     
       <category term="http method" scheme="http://yoursite.com/tags/http-method/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>cron表达式</title>
-    <link href="http://yoursite.com/2017/04/15/cron%E8%A1%A8%E8%BE%BE%E5%BC%8F/"/>
-    <id>http://yoursite.com/2017/04/15/cron表达式/</id>
-    <published>2017-04-15T11:22:22.000Z</published>
-    <updated>2018-03-24T13:39:31.770Z</updated>
-    
-    <content type="html"><![CDATA[<p>cron 表达式是用来配置CronTrigger, 执行指定任务， 如： 周期性执行某个数据统计。</p><h4 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h4><p>cron 表达式有7位， 格式如： “s m h d M w y” .</p><ol><li>s : 表示秒</li><li>m : 表示分</li><li>h : 表示小时</li><li>d : 表示天</li><li>M : 表示月</li><li>w : 表示周</li><li>y : 表示年</li></ol><p>示例：<br>“10 11 12 1 12 ? 2017”  ——  定时执行 2017/12/01 12:11:10<br>“5 6 /1 <em> </em> ?”          ——  每小时 6 分 5秒 执行<br>“<em> </em> <em> </em> <em> ?”           ——  立即执行<br>“0 12 17 /1 </em> ?”        ——  每天 17:12:0<br>“0 12 17 3 /1 ?”        ——  每月3号 17:12:0<br>“0 12 17 ? * 3,4”       ——  每周2,3 17：12：0</p><ol><li>最后一位 “年” 可省略</li><li>星期数字是 1-7， 星期日为1，星期一为2</li></ol><h4 id="特殊字符的作用"><a href="#特殊字符的作用" class="headerlink" title="特殊字符的作用"></a>特殊字符的作用</h4><ol><li>“/“ 这个符号代表该时间单位 进行重复执行。  “5 6 /1 <em> </em> ?” 表示每小时6分5秒， “5 /1 <em> </em> * ?” 表示每分5秒</li><li>“*” 通配符，不进行匹配验证或者说任意数字都行</li><li>“?” 验证匹配，用于和其他单位时间进行匹配验证， 如： 天 与 周 的验证匹配， 周 与 月 的验证等</li></ol><a id="more"></a>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;cron 表达式是用来配置CronTrigger, 执行指定任务， 如： 周期性执行某个数据统计。&lt;/p&gt;
-&lt;h4 id=&quot;格式&quot;&gt;&lt;a href=&quot;#格式&quot; class=&quot;headerlink&quot; title=&quot;格式&quot;&gt;&lt;/a&gt;格式&lt;/h4&gt;&lt;p&gt;cron 表达式有7位， 格式如： “s m h d M w y” .&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;s : 表示秒&lt;/li&gt;
-&lt;li&gt;m : 表示分&lt;/li&gt;
-&lt;li&gt;h : 表示小时&lt;/li&gt;
-&lt;li&gt;d : 表示天&lt;/li&gt;
-&lt;li&gt;M : 表示月&lt;/li&gt;
-&lt;li&gt;w : 表示周&lt;/li&gt;
-&lt;li&gt;y : 表示年&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;示例：&lt;br&gt;“10 11 12 1 12 ? 2017”  ——  定时执行 2017/12/01 12:11:10&lt;br&gt;“5 6 /1 &lt;em&gt; &lt;/em&gt; ?”          ——  每小时 6 分 5秒 执行&lt;br&gt;“&lt;em&gt; &lt;/em&gt; &lt;em&gt; &lt;/em&gt; &lt;em&gt; ?”           ——  立即执行&lt;br&gt;“0 12 17 /1 &lt;/em&gt; ?”        ——  每天 17:12:0&lt;br&gt;“0 12 17 3 /1 ?”        ——  每月3号 17:12:0&lt;br&gt;“0 12 17 ? * 3,4”       ——  每周2,3 17：12：0&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;最后一位 “年” 可省略&lt;/li&gt;
-&lt;li&gt;星期数字是 1-7， 星期日为1，星期一为2&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h4 id=&quot;特殊字符的作用&quot;&gt;&lt;a href=&quot;#特殊字符的作用&quot; class=&quot;headerlink&quot; title=&quot;特殊字符的作用&quot;&gt;&lt;/a&gt;特殊字符的作用&lt;/h4&gt;&lt;ol&gt;
-&lt;li&gt;“/“ 这个符号代表该时间单位 进行重复执行。  “5 6 /1 &lt;em&gt; &lt;/em&gt; ?” 表示每小时6分5秒， “5 /1 &lt;em&gt; &lt;/em&gt; * ?” 表示每分5秒&lt;/li&gt;
-&lt;li&gt;“*” 通配符，不进行匹配验证或者说任意数字都行&lt;/li&gt;
-&lt;li&gt;“?” 验证匹配，用于和其他单位时间进行匹配验证， 如： 天 与 周 的验证匹配， 周 与 月 的验证等&lt;/li&gt;
-&lt;/ol&gt;
-    
-    </summary>
-    
-    
-      <category term="cron" scheme="http://yoursite.com/tags/cron/"/>
     
   </entry>
   
