@@ -1,4 +1,40 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> CDBlog</title><meta name="description" content="A Blog Powered By Hexo"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yoursite.com/atom.xml" title="CDBlog"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><ul class="home post-list"><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2017/04/15/http-method-区分/" class="post-title-link">restful http method</a></h2><div class="post-info">Apr 15, 2017</div><div class="post-content"><p>POST GET PUT DELETE 4种方式大概类似与 “CRUD”.</p>
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> CDBlog</title><meta name="description" content="A Blog Powered By Hexo"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yoursite.com/atom.xml" title="CDBlog"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><ul class="home post-list"><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2017/11/29/CodeMirror-select2显示更新问题/" class="post-title-link">CodeMirror+select2显示更新问题</a></h2><div class="post-info">Nov 29, 2017</div><div class="post-content"><h3 id="CodeMirror显示ddl未更新问题"><a href="#CodeMirror显示ddl未更新问题" class="headerlink" title="CodeMirror显示ddl未更新问题"></a>CodeMirror显示ddl未更新问题</h3><p>现象: 在配置框中回显保存的配置数据，然后显示配置框，但是CodeMirror设置的数据没有自动更新，但是点击一下ddl显示框，马上就更新了。</p>
+<p>先用editor.doc.getValue()，查看当前的设置的数据，发现与设置的数据相同，但是页面显示没有更新为设置的值。<br>查找资料后发现，<strong><code>display:none</code> 隐藏的DOM， editor.doc.setValue(data)后，页面数据不会自动更新</strong>，解决方法是：<strong>显示配置框后，执行<code>editor.refresh()</code>进行刷新</strong></p>
+<h3 id="select2样式宽度问题"><a href="#select2样式宽度问题" class="headerlink" title="select2样式宽度问题"></a>select2样式宽度问题</h3><p>现象：同样是在配置框设置了select初始宽度为100%，进行select2()，切换显示配置后，select2宽度只有默认宽度，不是select设置的100%</p>
+<p>基于之前的经验，然后在<code>F12 console</code>中，对select再次进行select2()，发现样式显示正确了。<br>一样的问题，也是在隐藏的DOM中select2因为取不到select的宽度，不能自动适配，需要显示select所在的DOM后，再次进行select2()。</p></div><a href="/2017/11/29/CodeMirror-select2显示更新问题/" class="read-more">...more</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2017/11/27/file-upload/" class="post-title-link">file-upload</a></h2><div class="post-info">Nov 27, 2017</div><div class="post-content"><p>###<br>利用formData传递参数，xhr.upload.progress 方法得到上传进度 并清空input:file 当前值，可以重复上传文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">$(&apos;.file-btn&apos;).on(&apos;change&apos;, &apos;#fileupload&apos;, function(e)&#123;</span><br><span class="line">    var file = $(this)[0].files     //files 文件列表</span><br><span class="line"></span><br><span class="line">    for ( var i=0,len=file.length; i&lt;len; i++ )&#123;</span><br><span class="line">        var formData = new FormData();</span><br><span class="line">        formData.append(&apos;file&apos;, file[i]);</span><br><span class="line">        $.ajax(&#123;</span><br><span class="line">            url: &apos;upload&apos;,         // upload url</span><br><span class="line">            type:&apos;post&apos;,</span><br><span class="line">            data: formData,       // 参数</span><br><span class="line">            contentType: false,</span><br><span class="line">            processData: false,</span><br><span class="line">            xhr: function()       //xhr对象，得到客户端发出去的进度</span><br><span class="line">            &#123;</span><br><span class="line">                var xhr = new XMLHttpRequest();</span><br><span class="line">                xhr.upload.addEventListener(&quot;progress&quot;, function(evt)&#123;</span><br><span class="line">                    if (evt.lengthComputable) &#123;  </span><br><span class="line">                        var percentComplete = parseInt(evt.loaded * 100 / evt.total);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;, false);</span><br><span class="line">                return xhr;</span><br><span class="line">            &#125;,</span><br><span class="line">            success: function(data)&#123;</span><br><span class="line">                // 上传接口 回调处理</span><br><span class="line">                // code</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 清空当前的input:file值，可以连续上传同名文件</span><br><span class="line">    var newDom = $(this).clone().val(&apos;&apos;);  </span><br><span class="line">    $(this).remove();</span><br><span class="line">    $(&apos;.file-btn&apos;).append(newDom);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></div><a href="/2017/11/27/file-upload/" class="read-more">...more</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2017/11/27/input-file-美化/" class="post-title-link">input file 美化</a></h2><div class="post-info">Nov 27, 2017</div><div class="post-content"><h3 id="常见思路"><a href="#常见思路" class="headerlink" title="常见思路"></a>常见思路</h3><p>将默认的<code>input:file</code>隐藏，然后让外层容器的按钮样式展示出来。</p>
+<h4 id="方法1："><a href="#方法1：" class="headerlink" title="方法1："></a>方法1：</h4><p>将<code>input:file</code>透明度设置为0，并设置大小，将外层的容器设置样式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;file-btn&quot;&gt;</span><br><span class="line">    &lt;a&gt;添加文件&lt;/a&gt;</span><br><span class="line">    &lt;input autocomplete=&quot;off&quot; type=&quot;file&quot; id=&quot;fileupload&quot; name=&quot;files&quot; class=&quot;add-file&quot; multiple&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">.file-btn&#123;float: left;background: #004c6f;line-height: 30px;width:100px; text-align:center;position: relative; text-indent:-200em&#125;</span><br><span class="line">.add-file&#123;position: absolute;width: 100px;height: 30px;left:0;top:0;opacity: 0;cursor: pointer;&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="方法2："><a href="#方法2：" class="headerlink" title="方法2："></a>方法2：</h4><p>隐藏input:file，利用<code>label</code>标签。<br><code>label</code>有个特殊的聚焦特性，点击label区域，相当于点击其对应的input区域，有两种写法：</p>
+<ol>
+<li>label for id 方法， <code>&lt;label for=&quot;inputFile&quot;&gt;&lt;/label&gt;&lt;input type=&quot;file&quot; id=&quot;inputFile&quot;&gt;</code></li>
+<li>label包含input方法, <code>&lt;label&gt;&lt;input type=&quot;file&quot;&gt;&lt;/label&gt;</code></li>
+</ol></div><a href="/2017/11/27/input-file-美化/" class="read-more">...more</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2017/04/15/gulp多任务/" class="post-title-link">gulp多任务</a></h2><div class="post-info">Apr 15, 2017</div><div class="post-content"><h4 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h4><ol>
+<li>同时处理多个web文件</li>
+<li>css js 压缩合并</li>
+<li>资源版本号替换</li>
+<li>监听资源变化，进行压缩合并操作</li>
+</ol>
+<h4 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h4><pre><code>/resources
+    /common                //common源文件
+    /js
+    /sass
+    /libs                  //资源库文件
+    /dist
+        /testA
+            lib.min.js
+            lib.min.css
+            testA.js
+            testA.css
+        /testB
+            lib.min.js
+            lib.min.css
+            testB.js
+            testB.css
+        /common  
+            common.css
+            common.js  
+</code></pre><p>/resources/common 是公共的common.css common.js 源文件， 构建后在 /dist/common/ 下<br>/resources/sass, resources/js 是.scss .js 源文件</p></div><a href="/2017/04/15/gulp多任务/" class="read-more">...more</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2017/04/15/http-method-区分/" class="post-title-link">restful http method</a></h2><div class="post-info">Apr 15, 2017</div><div class="post-content"><p>POST GET PUT DELETE 4种方式大概类似与 “CRUD”.</p>
 <p>POST 相当于 新建资源<br>GET 从服务端接受资源<br>PUT 更新资源<br>DELETE 删除资源</p>
 <p><em>幂等的概念：  f(x) = f( f( f( f(x) ) ) )</em></p>
 <h4 id="区别"><a href="#区别" class="headerlink" title="区别"></a>区别</h4><p>GET  get 是安全的， 即不会更改服务端资源， 一个GET请求， 1次或者多次， 得到的结果是一样的， 具有幂等性。<br>POST 新建资源会有副作用，即 会增加资源， 不是安全的， 多次请求会产生多个新建资源，是非幂等的。<br>PUT 更新资源，提交相同的更新数据，1次更新或者多次更新， 更新的资源是一样的， 所以是 幂等的。<br>DELETE 一次或多次删除一个资源， 结果都是删除目标资源， 是幂等的</p></div><a href="/2017/04/15/http-method-区分/" class="read-more">...more</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2017/04/15/cron表达式/" class="post-title-link">cron表达式</a></h2><div class="post-info">Apr 15, 2017</div><div class="post-content"><p>cron 表达式是用来配置CronTrigger, 执行指定任务， 如： 周期性执行某个数据统计。</p>
@@ -113,88 +149,4 @@ beforeDestroy: function() {
 <li>就特殊的功用性而言，跨域常用的jsonp本质上就是get请求进行回调； 上传文件需要的 multipart/form-data, 就必须是post请求。</li>
 <li>编码与转译， get需要对特殊符号进行编码和转译，比如：encodeURIComponent(), 后端才能得到正确的数据； 而post则浏览器进行这项操作。</li>
 <li>get方式可以有页面缓存， 可以进行回退/前进操作， 而post没有。</li>
-</ol></div><a href="/2016/07/17/get-post区别/" class="read-more">...more</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2016/06/09/加盐密码/" class="post-title-link">加盐密码</a></h2><div class="post-info">Jun 9, 2016</div><div class="post-content"><h3 id="密文存储"><a href="#密文存储" class="headerlink" title="密文存储"></a>密文存储</h3><p>数据库中用户的密码一般是密文存储的，作用 ？</p>
-<ul>
-<li>防止被脱裤后账号泄露</li>
-<li>防止内部DBA或者有权限人员直接可以看到用户账号密码</li>
-</ul>
-<h3 id="加密hash算法"><a href="#加密hash算法" class="headerlink" title="加密hash算法"></a>加密hash算法</h3><p>传统的md5加密，在彩虹表的攻势下已经不再安全，新的加密方法呢？</p>
-<p><strong>可以使用</strong></p>
-<ul>
-<li>OpenWall的Portable PHP password hashing framework</li>
-<li>经过充分测试的加密hash函数，比如SHA256, SHA512, RipeMD, WHIRLPOOL, SHA3等</li>
-<li>设计良好的key扩展hash算法，比如PBKDF2，bcrypt，scrypt</li>
-<li>crypt的安全版本。($2y$, $5$, $6$)</li>
-</ul>
-<p><strong>不要使用</strong></p>
-<ul>
-<li>过时的hash函数，比如MD5,SHA1</li>
-<li>crypt的不安全版本。($1$, $2$, $2x$, $3$)</li>
-<li>任何自己设计的算法。</li>
-</ul>
-<h3 id="只依靠hash隐患"><a href="#只依靠hash隐患" class="headerlink" title="只依靠hash隐患"></a>只依靠hash隐患</h3><p>优秀的hash算法加密可以保障密文的安全，但如果多个企业只用一套”安全的加密算法”会有什么隐患？<br></div><a href="/2016/06/09/加盐密码/" class="read-more">...more</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2016/06/06/html-css-js-特殊字符/" class="post-title-link">html css js 特殊字符</a></h2><div class="post-info">Jun 6, 2016</div><div class="post-content"><p>对于一些不能用输入法直接打出的特殊符号，常用的方法包括字体图标，图片，纯css实现。</p>
-<h4 id="字体图标"><a href="#字体图标" class="headerlink" title="字体图标"></a>字体图标</h4><p>比如font-awesome font-icon web-font 等，都是引入一些字体库，然后直接调用class，实现图标，<br>这些图标的大小和颜色由普通字体的css属性控制，如color font-size。</p>
-<p>优点是图标可灵活调节，缺点是引入的字体库可能会比较大。。</p>
-<h4 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h4><p>这个最万能的方法。。。</p>
-<p>优点：兼容性方案<br>缺点：可能会引入较多碎片化的图标，增加了请求数，当然这个可以用雪碧图优化，只不过，色彩变化，大小控制方面灵活性不够</p>
-<h4 id="css实现"><a href="#css实现" class="headerlink" title="css实现"></a>css实现</h4><p>常见的比如 三角形用border-width实现。<br>缺点就是面对复杂的图形，将会很困难。</p>
-<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p>canvas  webGL  svg 等，一个是对低版本浏览器兼容不好， 实现也不一定方便。</p>
-<h3 id="特殊字符"><a href="#特殊字符" class="headerlink" title="特殊字符"></a>特殊字符</h3></div><a href="/2016/06/06/html-css-js-特殊字符/" class="read-more">...more</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2016/05/15/jquery插件/" class="post-title-link">jquery插件</a></h2><div class="post-info">May 15, 2016</div><div class="post-content"><p>说jQuery插件之前，先看看jQuery的几个关键点。</p>
-<ul>
-<li>jQuery.fn = jQuery.prototype </li>
-<li>jQuery = $</li>
-<li>jQuery.extend() = $.extend()</li>
-</ul>
-<p>前两个就别名关系， 第三个才是主要要说的。 $.extend(param a, param b) 作用是将参数b的中key值复制到a中，同key的话b将覆盖a的值。。<br>例如， $.extend({a:111, b:222, c:333}, {a:222, b:333, d:444})  将得到 对象{a:222, b:333, c:333, d:444}。</p>
-<p>进入正题， jQuery插件的写法。</p>
-<h4 id="extend"><a href="#extend" class="headerlink" title="$.extend"></a>$.extend</h4><pre><code>(function($){ 
-    $.extend({ 
-        functionA: function(){},
-        functionB: function(){}
-    });
-})(jQuery);
-</code></pre><p>自执行函数引入jQuery参数， 调用 $.extend()， 将functionA functionB 复制到jQuery对象中， 也就相当于 jQuery这个对象本身有了 functionA 和 functionB 一样。</p>
-<h4 id="fn-extend"><a href="#fn-extend" class="headerlink" title="$.fn.extend"></a>$.fn.extend</h4><p>同理,  可以用$.fn.extend() 方法。</p>
-<pre><code>(function($){ 
-        $.fn.extend({ 
-            functionA: function(){},
-            functionB: function(){}
-        });
-    })(jQuery);
-</code></pre><p>区别是， functionA functionB 复制到了jQuery.fn, 即 jQuery.prototype 上了。</p>
-<h3 id="一些技巧"><a href="#一些技巧" class="headerlink" title="一些技巧"></a>一些技巧</h3></div><a href="/2016/05/15/jquery插件/" class="read-more">...more</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2016/04/13/yii2/" class="post-title-link">yii2</a></h2><div class="post-info">Apr 13, 2016</div><div class="post-content"><p>前段时间学习了 yii2 这个 php MVC 框架。 向同事做了培训，搬运总结到blog上~~~</p>
-<p>文档资源：</p>
-<ul>
-<li><a href="http://www.yiichina.com/doc/guide/2.0" target="_blank" rel="noopener">中文文档</a>   </li>
-<li><a href="http://www.yiiframework.com/doc-2.0/guide-index.html" target="_blank" rel="noopener">官网文档</a></li>
-<li><a href="https://github.com/forecho/awesome-yii2" target="_blank" rel="noopener">yii2干货集 awesome-yii2</a></li>
-</ul>
-<h3 id="环境依赖"><a href="#环境依赖" class="headerlink" title="环境依赖"></a>环境依赖</h3><ul>
-<li>Yii 2.0 需要 PHP 5.4.0 或以上版本支持</li>
-<li>支持php7</li>
-</ul>
-<h3 id="Composer安装"><a href="#Composer安装" class="headerlink" title="Composer安装"></a>Composer安装</h3><p>win下的安装</p>
-<ul>
-<li>下载并安装 Composer-Setup.exe</li>
-<li>更新Composer <code>composer self-update</code></li>
-<li>composer global require “fxp/composer-asset-plugin:~1.1.1”   <strong>这里是 1.1.1，中文文档这里没更新，有坑，会影响后续yii2-smarty的安装</strong></li>
-<li>composer create-project –prefer-dist yiisoft/yii2-app-basic basic</li>
-</ul>
-<h3 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h3><pre><code>basic/                  应用根目录
-composer.json       Composer 配置文件, 描述包信息
-config/             包含应用配置及其它配置
-    console.php     控制台应用配置信息
-    web.php         Web 应用配置信息
-commands/           包含控制台命令类
-controllers/        包含控制器类
-models/             包含模型类
-runtime/            包含 Yii 在运行时生成的文件，例如日志和缓存文件
-vendor/             包含已经安装的 Composer 包，包括 Yii 框架自身
-views/              包含视图文件
-//modules           可以设置自己的模块
-web/                Web 应用根目录，包含 Web 入口文件
-    assets/         包含 Yii 发布的资源文件（javascript 和 css）
-    // js css img   可以设置文件目录
-    index.php       应用入口文件
-yii                 Yii 控制台命令执行脚本
-</code></pre></div><a href="/2016/04/13/yii2/" class="read-more">...more</a></article></li></ul></main><footer><div class="paginator"><a href="/page/2/" class="prev">PREV</a><a href="/page/4/" class="next">NEXT</a></div><div class="copyright"><p>© 2015 - 2019 <a href="http://yoursite.com">chendong</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-65933410-1",'auto');ga('send','pageview');</script></body></html>
+</ol></div><a href="/2016/07/17/get-post区别/" class="read-more">...more</a></article></li></ul></main><footer><div class="paginator"><a href="/page/2/" class="prev">PREV</a><a href="/page/4/" class="next">NEXT</a></div><div class="copyright"><p>© 2015 - 2019 <a href="http://yoursite.com">chendong</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-65933410-1",'auto');ga('send','pageview');</script></body></html>

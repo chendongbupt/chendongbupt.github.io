@@ -1,0 +1,15 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> var let 箭头函数与普通函数 · CDBlog</title><meta name="description" content="var let 箭头函数与普通函数 - chendong"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yoursite.com/atom.xml" title="CDBlog"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">var let 箭头函数与普通函数</h1><div class="post-info">May 4, 2019</div><div class="post-content"><p>箭头函数对比普通函数：</p>
+<ol>
+<li>箭头函数没有this， 执行bind apply call 不能改变上下文</li>
+<li>没有arguments</li>
+<li>匿名函数，不能new 实例，没有prototype</li>
+<li>不能作为generator函数，不能调用yeild</li>
+</ol>
+<a id="more"></a>
+<p>let vs var:</p>
+<ul>
+<li>作用域不一样，var 函数作用域， let 是块作用域</li>
+<li>let 不能重复声明， var可以多次声明</li>
+<li>let 会暂时性死区，对应的var 会前置声明，造成变量提升</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a href="/2019/05/04/实现继承inherit/" class="prev">PREV</a><a href="/2019/05/04/instanceOf/" class="next">NEXT</a></div><div class="copyright"><p>© 2015 - 2019 <a href="http://yoursite.com">chendong</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-65933410-1",'auto');ga('send','pageview');</script></body></html>
