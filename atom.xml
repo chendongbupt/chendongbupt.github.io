@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2019-05-04T08:15:09.438Z</updated>
+  <updated>2019-10-07T11:11:24.083Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,20 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>css实现文字镂空</title>
+    <link href="http://yoursite.com/2019/10/07/css%E5%AE%9E%E7%8E%B0%E6%96%87%E5%AD%97%E9%95%82%E7%A9%BA/"/>
+    <id>http://yoursite.com/2019/10/07/css实现文字镂空/</id>
+    <published>2019-10-07T11:11:24.000Z</published>
+    <updated>2019-10-07T11:11:24.083Z</updated>
+    
+    <summary type="html">
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>改变上下文bind apply call</title>
@@ -476,25 +490,6 @@
     
     
       <category term="vuex vue-router" scheme="http://yoursite.com/tags/vuex-vue-router/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>select2自定义模板</title>
-    <link href="http://yoursite.com/2017/12/03/select2%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A8%A1%E6%9D%BF/"/>
-    <id>http://yoursite.com/2017/12/03/select2自定义模板/</id>
-    <published>2017-12-03T06:29:08.000Z</published>
-    <updated>2018-03-24T13:41:51.981Z</updated>
-    
-    <content type="html"><![CDATA[<p>select2官方文档描述的 <code>templateResult</code> option。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">//自定义select2 option 展示模板</span><br><span class="line">function columnSelectFormat(selectDom)&#123;</span><br><span class="line">    selectDom.select2(&#123;templateResult:function(state)&#123;</span><br><span class="line">        var dom = $(state.element);</span><br><span class="line">        if ( !dom.val() )</span><br><span class="line">            return &apos;(value为空)&apos;;</span><br><span class="line">        var $state = $(&apos;&lt;div title=&quot;&apos;+dom.text()+&apos;&quot;&gt;&lt;span&gt;&apos;+dom.text()+&apos;&lt;/span&gt;&lt;span&gt;&apos; + dom.val() + &apos;&lt;/span&gt;&lt;/div&gt;&apos;);</span><br><span class="line">        return $state;</span><br><span class="line">    &#125;, templateSelection: function(state)&#123;</span><br><span class="line">        var dom = $(state.element);</span><br><span class="line">        if ( !dom.val() )</span><br><span class="line">            return &apos;(value为空)&apos;;</span><br><span class="line">        var $state = $(&apos;&lt;div title=&quot;&apos;+dom.text()+&apos;&quot;&gt;&lt;span&gt;&apos;+dom.text()+&apos;&lt;/span&gt;&lt;span&gt;&apos; + dom.val() + &apos;&lt;/span&gt;&lt;/div&gt;&apos;);</span><br><span class="line">        return $state;</span><br><span class="line">    &#125;&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// $.prototype</span><br><span class="line">$.fn.extend(&#123;</span><br><span class="line">    columnSelectFormat: function()&#123;</span><br><span class="line">        columnSelectFormat(this);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure><a id="more"></a>]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;select2官方文档描述的 &lt;code&gt;templateResult&lt;/code&gt; option。&lt;/p&gt;
-&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;//自定义select2 option 展示模板&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;function columnSelectFormat(selectDom)&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    selectDom.select2(&amp;#123;templateResult:function(state)&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        var dom = $(state.element);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        if ( !dom.val() )&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            return &amp;apos;(value为空)&amp;apos;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        var $state = $(&amp;apos;&amp;lt;div title=&amp;quot;&amp;apos;+dom.text()+&amp;apos;&amp;quot;&amp;gt;&amp;lt;span&amp;gt;&amp;apos;+dom.text()+&amp;apos;&amp;lt;/span&amp;gt;&amp;lt;span&amp;gt;&amp;apos; + dom.val() + &amp;apos;&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;apos;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        return $state;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;, templateSelection: function(state)&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        var dom = $(state.element);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        if ( !dom.val() )&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            return &amp;apos;(value为空)&amp;apos;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        var $state = $(&amp;apos;&amp;lt;div title=&amp;quot;&amp;apos;+dom.text()+&amp;apos;&amp;quot;&amp;gt;&amp;lt;span&amp;gt;&amp;apos;+dom.text()+&amp;apos;&amp;lt;/span&amp;gt;&amp;lt;span&amp;gt;&amp;apos; + dom.val() + &amp;apos;&amp;lt;/span&amp;gt;&amp;lt;/div&amp;gt;&amp;apos;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        return $state;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&amp;#125;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;// $.prototype&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$.fn.extend(&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    columnSelectFormat: function()&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        columnSelectFormat(this);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-    
-    </summary>
-    
     
   </entry>
   
