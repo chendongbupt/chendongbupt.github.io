@@ -1,4 +1,83 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> CDBlog</title><meta name="description" content="A Blog Powered By Hexo"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yoursite.com/atom.xml" title="CDBlog"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><ul class="home post-list"><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2016/07/17/get-post区别/" class="post-title-link">get-post区别</a></h2><div class="post-info">Jul 17, 2016</div><div class="post-content"><p>鉴于前几天又看过的一篇关于 “get与post区别的文章”， 对于这个老生常谈的问题，我记录下自己的总结。</p>
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> CDBlog</title><meta name="description" content="A Blog Powered By Hexo"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yoursite.com/atom.xml" title="CDBlog"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><ul class="home post-list"><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2017/03/26/vue2结合select2-highCharts/" class="post-title-link">vue2结合select2,Highcharts</a></h2><div class="post-info">Mar 26, 2017</div><div class="post-content"><h3 id="vue2-中使用Highcharts"><a href="#vue2-中使用Highcharts" class="headerlink" title="vue2 中使用Highcharts"></a>vue2 中使用Highcharts</h3><p>stackoverflow 上的有答案 <a href="http://stackoverflow.com/questions/38777136/highcharts-in-vue-js-component" target="_blank" rel="noopener">http://stackoverflow.com/questions/38777136/highcharts-in-vue-js-component</a><br>因为画布要刷新，涉及到数据销毁, 需要执行 <code>this.target.destroy();</code> 。<br>需要注意的是，当数据处于隐藏状态时不能触发 <code>beforeDestroy</code> ， 即 <code>&lt;div v-show=&quot;isShow&quot;&gt;&lt;/div&gt;</code><br>刷新数据需要销毁之前的画布数据， 利用 <code>v-if</code> 进行动态销毁、新增。<br>    <template><br>        <div><br>            <chart :series="initSeries"></chart><br>        </div><br>    </template></p>
+<pre><code>&lt;script&gt;
+var Highcharts = require(&apos;highcharts&apos;);
+export default {
+    name : &quot;Chart&quot;,
+    props : {
+    series : {
+        type: Array,
+        required: true
+    }
+    },
+    data : function() {
+    return {
+        target: undefined
+    }
+    },
+    mounted : function() {
+    this.target = Highcharts.chart(this.$el, {
+        title: {
+        text: &apos;Monthly Average Temperature&apos;,
+        x: -20 //center
+        },
+        subtitle: {
+        text: &apos;Source: WorldClimate.com&apos;,
+        x: -20
+        },
+        xAxis: {
+        categories: [&apos;Jan&apos;, &apos;Feb&apos;, &apos;Mar&apos;, &apos;Apr&apos;, &apos;May&apos;, &apos;Jun&apos;,
+        &apos;Jul&apos;, &apos;Aug&apos;, &apos;Sep&apos;, &apos;Oct&apos;, &apos;Nov&apos;, &apos;Dec&apos;]
+        },
+        yAxis: {
+        title: {
+        text: &apos;Temperature (°C)&apos;
+        },
+        plotLines: [{
+        value: 0,
+        width: 1,
+        color: &apos;#808080&apos;
+        }]
+    },
+    tooltip: {
+        valueSuffix: &apos;°C&apos;
+    },
+    legend: {
+        layout: &apos;vertical&apos;,
+        align: &apos;right&apos;,
+        verticalAlign: &apos;middle&apos;,
+            borderWidth: 0
+    },
+    series: this.series
+    });
+},
+beforeDestroy: function() {
+    this.target.destroy();
+},
+}
+&lt;/script&gt;
+</code></pre><h3 id="vue2-使用select2"><a href="#vue2-使用select2" class="headerlink" title="vue2 使用select2"></a>vue2 使用select2</h3></div><a href="/2017/03/26/vue2结合select2-highCharts/" class="read-more">...more</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2017/03/21/jqGrid/" class="post-title-link">jqGrid</a></h2><div class="post-info">Mar 21, 2017</div><div class="post-content"><p>jqGrid 是一个表格插件，拥有排序、翻页、每页大小变化等常见功能等。</p>
+<pre><code>$(&apos;#tableName&apos;).jqGrid({
+    url : &apos;interface_url&apos;,
+    datatype : &quot;json&quot;,
+    colNames : [ &apos;Inv No&apos;, &apos;Date&apos;, &apos;Client&apos;, &apos;Amount&apos;, &apos;Tax&apos;,&apos;Total&apos;, &apos;Notes&apos; ],
+    colModel : [ 
+                 {name : &apos;id&apos;,index : &apos;id&apos;,width : 55}, 
+                 {name : &apos;invdate&apos;,index : &apos;invdate&apos;,width : 90}, 
+                 {name : &apos;name&apos;,index : &apos;name asc, invdate&apos;,width : 100, hidden:true}, 
+                 {name : &apos;amount&apos;,index : &apos;amount&apos;,width : 80,align : &quot;right&quot;}, 
+                 {name : &apos;tax&apos;,index : &apos;tax&apos;,width : 80,align : &quot;right&quot;}, 
+                 {name : &apos;total&apos;,index : &apos;total&apos;,width : 80,align : &quot;right&quot;}, 
+                 {name : &apos;note&apos;,index : &apos;note&apos;,width : 150,sortable : false} 
+               ],
+    rowNum : 10,
+    rowList : [ 10, 20, 30 ],
+    pager : &apos;#pager2&apos;,
+    sortname : &apos;id&apos;,
+    mtype : &quot;post&quot;,
+    viewrecords : true,
+    sortorder : &quot;desc&quot;
+})
+</code></pre><p>利用jqGrid进行table定义, 定义之后 利用 <code>$(&#39;#tableName&#39;).trigger(&quot;reloadGrid&quot;)</code> 触发更新。</p></div><a href="/2017/03/21/jqGrid/" class="read-more">...more</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2016/07/17/get-post区别/" class="post-title-link">get-post区别</a></h2><div class="post-info">Jul 17, 2016</div><div class="post-content"><p>鉴于前几天又看过的一篇关于 “get与post区别的文章”， 对于这个老生常谈的问题，我记录下自己的总结。</p>
 <ol>
 <li>就浏览器表现来看，get是直接将参数展现在地址栏上，有一定的长度限定， 大概2kb?4kb?反正是有较小的长度限定，当然除了传大量数据，一般的get请求是没问题的； 而post则将参数放到了request body中，并没有来地址栏中展现，参数内容长度则可以很大，适合传输有大量数据的请求。</li>
 <li>就语义化而言，get是直接发一次包进行请求，是幂等的，表示拉取数据，主要是进行读操作；而post则是非幂等，发两次包，一次头部，第二次包含了参数的body，表示数据存在更改，包括新建、更新、删除操作。</li>
@@ -160,13 +239,4 @@ console.log(a); // 10
     right: 0;
     -webkit-transform-style: preserve-3d;
 }
-</code></pre><p>当点击input时， 由于内容部分可以scroll滑动， 可以方便的输入信息， 不存在问题。</p></div><a href="/2016/03/27/fixed与input处理/" class="read-more">...more</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2016/03/25/微商城详情页的效果总结/" class="post-title-link">微商城详情页的效果总结</a></h2><div class="post-info">Mar 25, 2016</div><div class="post-content"><h3 id="微商城详情页H5效果"><a href="#微商城详情页H5效果" class="headerlink" title="微商城详情页H5效果"></a>微商城详情页H5效果</h3><p>这个效果是仿寺库APP的效果。<br><img src="/images/goodsAnim.gif" alt=""></p>
-<h4 id="CSS"><a href="#CSS" class="headerlink" title="CSS"></a>CSS</h4><h5 id="商品图"><a href="#商品图" class="headerlink" title="商品图"></a>商品图</h5><p>这个比较好说，向上滑动到一定阶段触发动画， 商品图变小，采用的是CSS3的<code>translateZ()</code> <code>perspective</code> 实现，当然也可以通过<code>scale()</code>和设置外层div宽高实现，用<code>perspective</code>是为了顺便实现加入购物车按钮3D翻转的效果。<br>颜色变灰，则是 <code>filter:grayscale()</code>，最后消失则是 <code>opacity</code>，最后的这个消失效果是个兼容iOS下图片闪烁的处理，后面再谈这个兼容问题。</p>
-<p>商品图是用了swipe.js滑动。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;goods-img&quot; id=&quot;slider&quot; style=&quot;visibility: visible; opacity: 1;&quot;&gt;</span><br><span class="line">            &lt;ul style=&quot;width: 1032.56px;&quot;&gt;</span><br><span class="line">                 &lt;li&gt;&lt;img src=&quot;&quot; alt=&quot;&quot;&gt;&lt;/li&gt;</span><br><span class="line">                 &lt;li&gt;&lt;img src=&quot;&quot; alt=&quot;&quot;&gt;&lt;/li&gt;</span><br><span class="line">                 &lt;li&gt;&lt;img src=&quot;&quot; alt=&quot;&quot;&gt;&lt;/li&gt;</span><br><span class="line">            &lt;/ul&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
-<h5 id="详情介绍部分"><a href="#详情介绍部分" class="headerlink" title="详情介绍部分"></a>详情介绍部分</h5><p>一直居于底部，高度发生变化，并且是可滚动查看内容的。动画效果，主要是改变容器的<code>height</code>，并且绝对定位，居于底部，<code>position:absolute;</code>, 为了滚动， 加了属性 <code>overflow:scroll</code>。 一开始通过JS算出总高度和商品图高度，得到详情部分的初始高度。<code>touchstart</code>记录初始位置， <code>touchmove</code>则记录即时位置，<br>计算出商品图变小的比例和详情部分高度的变化。 <code>touchend</code>和 <strong><code>touchcancel</code></strong>的时候，位移小则回复原位，大于50则向上展开。<br>购物车的图标的动画效果，在iOS下会使<strong>商品图-详情部分-购物车图标</strong>三者层级混乱闪烁，<code>-webkit-backface-visibility:hidden</code>无效，商品图隐藏可以规避这个问题。<br></div><a href="/2016/03/25/微商城详情页的效果总结/" class="read-more">...more</a></article></li><li class="post-list-item"><article class="post-block"><h2 class="post-title"><a href="/2016/03/23/oauth-url-filter/" class="post-title-link">oauth url filter</a></h2><div class="post-info">Mar 23, 2016</div><div class="post-content"><h3 id="url-处理"><a href="#url-处理" class="headerlink" title="url 处理"></a>url 处理</h3><p>微信授权后，返回的链接带有code 和 state 参数， 而code是一段字符串，而且是一次性的。<br>如果用户在认证后的页面将链接分享出去， 那么别的用户点击这个链接将会出现认证失败的情况。<br>对于这个问题，有三种处理方法：</p>
-<ul>
-<li>php 尾处理，认证后queryString，将参数中的code和state去除掉</li>
-<li>php 首处理，首次进入页面， queryString， 处理掉code和state参数</li>
-<li>JS-SDK， 分享链接时，去除掉</li>
-</ul>
-<h4 id="php-尾处理"><a href="#php-尾处理" class="headerlink" title="php 尾处理"></a>php 尾处理</h4><p>授权成功后，queryString， 将参数code和state过滤，重新拼接字符串<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//认证成功，处于登录状态</span><br><span class="line">//todo</span><br><span class="line"></span><br><span class="line">$params = explode(&apos;&amp;&apos;, $_SERVER[&apos;QUERY_STRING&apos;]);</span><br><span class="line">$urlHost = &apos;http://&apos;.$_SERVER[&apos;HTTP_HOST&apos;].$_SERVER[&apos;PHP_SELF&apos;].&apos;?&apos;;</span><br><span class="line">foreach ( $params as $k =&gt; $v )&#123;</span><br><span class="line">    if ( empty($v) )  //去掉空白</span><br><span class="line">        continue;</span><br><span class="line">    if ( preg_match(&quot;/^code=|^state/&quot;, $v) )  //过滤 code state</span><br><span class="line">        continue;</span><br><span class="line">    $urlHost .= $v.&apos;&amp;&apos;;</span><br><span class="line">&#125;</span><br><span class="line">header(&apos;Location: &apos;.$urlHost);</span><br></pre></td></tr></table></figure></p></div><a href="/2016/03/23/oauth-url-filter/" class="read-more">...more</a></article></li></ul></main><footer><div class="paginator"><a href="/page/3/" class="prev">PREV</a><a href="/page/5/" class="next">NEXT</a></div><div class="copyright"><p>© 2015 - 2019 <a href="http://yoursite.com">chendong</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-65933410-1",'auto');ga('send','pageview');</script></body></html>
+</code></pre><p>当点击input时， 由于内容部分可以scroll滑动， 可以方便的输入信息， 不存在问题。</p></div><a href="/2016/03/27/fixed与input处理/" class="read-more">...more</a></article></li></ul></main><footer><div class="paginator"><a href="/page/3/" class="prev">PREV</a><a href="/page/5/" class="next">NEXT</a></div><div class="copyright"><p>© 2015 - 2019 <a href="http://yoursite.com">chendong</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;e=o.createElement(i);r=o.getElementsByTagName(i)[0];e.src='//www.google-analytics.com/analytics.js';r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));ga('create',"UA-65933410-1",'auto');ga('send','pageview');</script></body></html>
